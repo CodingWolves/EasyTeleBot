@@ -44,6 +44,7 @@ class EasyBot:
                             .format(self.telegram_token, self.acts, self.webhook_url))
 
         import os
+        import redis
         REDIS_URL = os.environ['REDIS_URL']
         print(REDIS_URL)
 
