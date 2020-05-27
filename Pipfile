@@ -11,6 +11,7 @@ gunicorn = "*"
 python-telegram-bot = "*"
 EasyBot = "*"
 tests = "*"
+redis = "*"
 
 [requires]
 
