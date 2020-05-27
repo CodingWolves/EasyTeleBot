@@ -12,7 +12,7 @@ class EasyBot:
     def __init__(self, actions_file, token=str, url=str):
         if issubclass(type(actions_file), str):
             actions_file = open(actions_file)
-        if issubclass(type(actions_file), io):
+        if issubclass(type(actions_file), io.IOBase):
             actions_text = json.load(actions_file)
         self.acts = Act.InitializeActs(actions_text.actions)
 
