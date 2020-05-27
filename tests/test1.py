@@ -5,4 +5,4 @@ app = EasyBot(file)
 
 if __name__ == '__main__':
     print('main function started')
-    bot.app.run(threaded=True)
+    app.run()

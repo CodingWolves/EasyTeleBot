@@ -82,3 +82,7 @@ class EasyBot:
 
     def set_webhook(self):
         return self.bot.setWebhook('{URL}{HOOK}'.format(URL=self.url, HOOK=self.token))
+
+    def run(self, host=None, port=None, debug=None, load_dotenv=None):
+        print("host={}, port={}, debug={}, load_dotenv={}".format(host=host, port=port, debug=debug, load_dotenv=load_dotenv))
+        self.app.run(host=host, port=port, debug=debug, load_dotenv=load_dotenv)
