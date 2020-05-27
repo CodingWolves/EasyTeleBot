@@ -6,4 +6,4 @@ app = easybot.app
 
 if __name__ == '__main__':
     print('main function started')
-    easybot.app.run()
+    app.run()

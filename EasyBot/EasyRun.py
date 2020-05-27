@@ -5,6 +5,7 @@ from EasyBot import Act
 
 import io
 import json
+from urllib import parse
 
 
 class EasyBot:
@@ -31,6 +32,13 @@ class EasyBot:
         if webhook_url:
             self.webhook_url = webhook_url
 
+        url = parse.urlparse(self.webhook_url)
+        if not url.scheme or not url.netloc:
+            raise Exception('EasyBot need to get webhook with http:// or https:// , got {}'.format(self.webhook_url))
+        self.webhook_base_url = url.scheme + "//" + url.netloc + "/"
+        self.webhook_url_path = url.path
+        print(self.webhook_url_path)
+
         self.bot_name = config_text['bot_name']
         if bot_name:
             self.bot_name = bot_name
@@ -45,13 +53,11 @@ class EasyBot:
 
         self.set_webhook()
         self.app = Flask(__name__)
-        print(self.app)
 
         print("EasyBot created bot '{}' successfully".format(config_text['bot_name']))
 
-        @self.app.route('/{}'.format('123456'), methods=['POST'])
+        @self.app.route(self.webhook_url_path, methods=['POST'])
         def respond():
-            print('Got Respond')
             update = telegram.Update.de_json(request.get_json(force=True), self.bot)
             if self.print_updates:
                 print(update)
@@ -75,7 +81,7 @@ class EasyBot:
 
         @self.app.route('/set_webhook', methods=['GET', 'POST'])
         def set_webhook():
-            print('set_webhook function')
+            print('webhook set')
             webhook_ok = self.set_webhook()
             return "webhook setup - {webhook}".format(webhook='ok' if webhook_ok else 'failed')
 
@@ -83,4 +89,4 @@ class EasyBot:
         self.print_updates = print_updates
 
     def set_webhook(self):
-        return self.bot.setWebhook('{URL}'.format(URL=self.webhook_url))
+        return self.bot.setWebhook(self.webhook_url)
