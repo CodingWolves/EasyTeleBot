@@ -9,18 +9,26 @@ import json
 
 class EasyBot:
 
-    def __init__(self, actions_file, token=str, url=str):
-        if issubclass(type(actions_file), str):
-            actions_file = open(actions_file)
+    def __init__(self, config_file, token=None, url=None):
+        if issubclass(type(config_file), str):
+            actions_file = open(config_file)
         if issubclass(type(actions_file), io.IOBase):
             actions_text = json.load(actions_file)
-        self.acts = Act.InitializeActs(actions_text.actions)
 
-        self.token = actions_text.token
+        if not actions_text:
+            raise Exception("could not initialize EasyBot from config file")
+
+        self.acts = Act.InitializeActs(actions_text['actions'])
+
+        print("read config_file - {}".format(actions_text))
+
+        self.token = actions_text['token']
         if token:
             self.token = token
 
-        self.token = actions_text.url
+        print(str(self.token))
+
+        self.url = actions_text['url']
         if url:
             self.url = url
 
@@ -28,7 +36,13 @@ class EasyBot:
         self.chats = []
         self.print_updates = False
 
+        if not self.token or not self.acts or not self.url:
+            raise Exception("could not initialize EasyBot , missing parameter token={} acts={} url={}"
+                            .format(self.token, self.acts, self.url))
+
         self.app = Flask(__name__)
+
+        self.set_webhook()
 
         @self.app.route('/{}'.format(self.token), methods=['POST'])
         def respond():
@@ -56,8 +70,11 @@ class EasyBot:
         @self.app.route('/set_webhook', methods=['GET', 'POST'])
         def set_webhook():
             print('set_webhook function')
-            webhook_ok = self.bot.setWebhook('{URL}{HOOK}'.format(URL=self.url, HOOK=self.token))
+            self.set_webhook()
             return "webhook setup - {webhook}".format(webhook='ok' if webhook_ok else 'failed')
 
     def setPrintAllUpdates(self, print_updates: bool):
         self.print_updates = print_updates
+
+    def set_webhook(self):
+        webhook_ok = self.bot.setWebhook('{URL}{HOOK}'.format(URL=self.url, HOOK=self.token))
