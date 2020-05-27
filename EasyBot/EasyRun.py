@@ -43,10 +43,9 @@ class EasyBot:
             raise Exception("could not initialize EasyBot , missing parameter token={} acts={} url={}"
                             .format(self.telegram_token, self.acts, self.webhook_url))
 
-        global HEROKU_APP_NAME
-        if HEROKU_APP_NAME:
-            print('HEROKU_APP_NAME exist!')
-        print(HEROKU_APP_NAME)
+        import os
+        REDIS_URL = os.environ['REDIS_URL']
+        print(REDIS_URL)
 
         self.set_webhook()
         self.app = Flask(__name__)
