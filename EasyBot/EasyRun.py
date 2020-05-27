@@ -23,8 +23,6 @@ class EasyBot:
 
         self.acts = Act.InitializeActs(config_text['actions'])
 
-
-
         self.token = config_text['token']
         if token:
             self.token = token
