@@ -1,0 +1,24 @@
+{
+  "actions": [
+    {
+        "id": 1,
+        "triggers": ["/start", "start"],
+        "type": "text",
+        "data": "Welcome to coolAvatar bot,the bot is using the service from http://avatars.adorable.io/to generate cool looking avatars based on the name you enterso please enter a name and the bot will reply with an avatar for your name."
+    },
+    {
+        "id": 2,
+        "triggers": ["hi", "hello", "hey"],
+        "type": "text",
+        "data": "hello to you too"
+    },
+    {
+        "id": 1000,
+        "triggers": ["ok", "okay", "OK", "Ok"],
+        "type": "text",
+        "data": "OK"
+    }
+  ],
+  "token": "1089629759:AAFAwWzcSLxpuBWWGKTnwABeayNZ_QJsvxw",
+  "url": "https://zahavy-easy-bot.heroku.com"
+}

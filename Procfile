@@ -1,0 +1,1 @@
+web: gunicorn --chdir tests test1:app --preload
