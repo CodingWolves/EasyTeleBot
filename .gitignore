@@ -1,6 +1,7 @@
 *.7z
 .idea/
 *.bat
+*Pypi*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
