@@ -50,6 +50,7 @@ class EasyBot:
 
         @self.app.route('/{}'.format(self.token), methods=['POST'])
         def respond():
+            print('Got Respond')
             update = telegram.Update.de_json(request.get_json(force=True), self.bot)
             if self.print_updates:
                 print(update)
