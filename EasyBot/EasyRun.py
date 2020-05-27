@@ -9,40 +9,46 @@ import json
 
 class EasyBot:
 
-    def __init__(self, config_file, token=None, url=None):
+    def __init__(self, config_file, token=None, url=None, bot_name=None):
+        config_text = None
         if issubclass(type(config_file), str):
-            actions_file = open(config_file)
-        if issubclass(type(actions_file), io.IOBase):
-            actions_text = json.load(actions_file)
+            config_file = open(config_file)
+        if issubclass(type(config_file), io.IOBase):
+            config_text = json.load(config_file)
 
-        if not actions_text:
+        print("read config file - {}".format(config_text))
+
+        if not config_text:
             raise Exception("could not initialize EasyBot from config file")
 
-        self.acts = Act.InitializeActs(actions_text['actions'])
+        self.acts = Act.InitializeActs(config_text['actions'])
 
-        print("read config_file - {}".format(actions_text))
 
-        self.token = actions_text['token']
+
+        self.token = config_text['token']
         if token:
             self.token = token
 
-        print(str(self.token))
-
-        self.url = actions_text['url']
+        self.url = config_text['url']
         if url:
             self.url = url
+
+        self.bot_name = config_text['bot_name']
+        if bot_name:
+            self.bot_name = bot_name
 
         self.bot = telegram.Bot(token=self.token)
         self.chats = []
         self.print_updates = False
 
-        if not self.token or not self.acts or not self.url:
+        if not self.token or not self.acts or not self.url or not self.bot_name:
             raise Exception("could not initialize EasyBot , missing parameter token={} acts={} url={}"
                             .format(self.token, self.acts, self.url))
 
+        self.set_webhook()
         self.app = Flask(__name__)
 
-        self.set_webhook()
+        print("EasyBot created bot '{}' successfully".format(config_text['bot_name']))
 
         @self.app.route('/{}'.format(self.token), methods=['POST'])
         def respond():
@@ -70,11 +76,11 @@ class EasyBot:
         @self.app.route('/set_webhook', methods=['GET', 'POST'])
         def set_webhook():
             print('set_webhook function')
-            self.set_webhook()
+            webhook_ok = self.set_webhook()
             return "webhook setup - {webhook}".format(webhook='ok' if webhook_ok else 'failed')
 
     def setPrintAllUpdates(self, print_updates: bool):
         self.print_updates = print_updates
 
     def set_webhook(self):
-        webhook_ok = self.bot.setWebhook('{URL}{HOOK}'.format(URL=self.url, HOOK=self.token))
+        return self.bot.setWebhook('{URL}{HOOK}'.format(URL=self.url, HOOK=self.token))
