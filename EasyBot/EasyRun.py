@@ -43,13 +43,9 @@ class EasyBot:
             raise Exception("could not initialize EasyBot , missing parameter token={} acts={} url={}"
                             .format(self.telegram_token, self.acts, self.webhook_url))
 
-        import os
-        import redis
-        REDIS_URL = os.environ['REDIS_URL']
-        print(REDIS_URL)
-
         self.set_webhook()
         self.app = Flask(__name__)
+        print(self.app)
 
         print("EasyBot created bot '{}' successfully".format(config_text['bot_name']))
 
