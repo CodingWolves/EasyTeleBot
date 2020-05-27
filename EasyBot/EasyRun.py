@@ -37,7 +37,7 @@ class EasyBot:
             raise Exception('EasyBot need to get webhook with http:// or https:// , got {}'.format(self.webhook_url))
         self.webhook_base_url = url.scheme + "//" + url.netloc + "/"
         self.webhook_url_path = url.path
-        print(self.webhook_url_path)
+        print('webhook path is = {}'.format(self.webhook_url_path))
 
         self.bot_name = config_text['bot_name']
         if bot_name:
