@@ -19,7 +19,7 @@
         "data": "OK"
     }
   ],
-  "token": "1089629759:AAFAwWzcSLxpuBWWGKTnwABeayNZ_QJsvxw",
-  "url": "https://zahavy-easy-bot.herokuapp.com/",
+  "telegram_token": "1089629759:AAFAwWzcSLxpuBWWGKTnwABeayNZ_QJsvxw",
+  "webhook_url": "https://zahavy-easy-bot.herokuapp.com/123456",
   "bot_name": "zahav_bot"
 }

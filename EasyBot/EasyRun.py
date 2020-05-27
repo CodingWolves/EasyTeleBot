@@ -9,7 +9,7 @@ import json
 
 class EasyBot:
 
-    def __init__(self, config_file, token=None, url=None, bot_name=None):
+    def __init__(self, config_file, telegram_token=None, webhook_url=None, bot_name=None):
         config_text = None
         if issubclass(type(config_file), str):
             config_file = open(config_file)
@@ -23,32 +23,36 @@ class EasyBot:
 
         self.acts = Act.InitializeActs(config_text['actions'])
 
-        self.token = config_text['token']
-        if token:
-            self.token = token
+        self.telegram_token = config_text['telegram_token']
+        if telegram_token:
+            self.telegram_token = telegram_token
 
-        self.url = config_text['url']
-        if url:
-            self.url = url
+        self.webhook_url = config_text['webhook_url']
+        if webhook_url:
+            self.webhook_url = webhook_url
 
         self.bot_name = config_text['bot_name']
         if bot_name:
             self.bot_name = bot_name
 
-        self.bot = telegram.Bot(token=self.token)
+        self.bot = telegram.Bot(token=self.telegram_token)
         self.chats = []
         self.print_updates = False
 
-        if not self.token or not self.acts or not self.url or not self.bot_name:
+        if not self.telegram_token or not self.acts or not self.webhook_url or not self.bot_name:
             raise Exception("could not initialize EasyBot , missing parameter token={} acts={} url={}"
-                            .format(self.token, self.acts, self.url))
+                            .format(self.telegram_token, self.acts, self.webhook_url))
+
+        import os
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        print(os.path.dirname(os.path.realpath(__file__)))
 
         self.set_webhook()
         self.app = Flask(__name__)
 
         print("EasyBot created bot '{}' successfully".format(config_text['bot_name']))
 
-        @self.app.route('/{}'.format(self.token), methods=['POST'])
+        @self.app.route('/{}'.format('123456'), methods=['POST'])
         def respond():
             print('Got Respond')
             update = telegram.Update.de_json(request.get_json(force=True), self.bot)
@@ -82,8 +86,4 @@ class EasyBot:
         self.print_updates = print_updates
 
     def set_webhook(self):
-        return self.bot.setWebhook('{URL}{HOOK}'.format(URL=self.url, HOOK=self.token))
-
-    def run(self, host=None, port=None, debug=None, load_dotenv=None):
-        print("host={}, port={}, debug={}, load_dotenv={}".format(host=host, port=port, debug=debug, load_dotenv=load_dotenv))
-        self.app.run(host=host, port=port, debug=debug, load_dotenv=load_dotenv)
+        return self.bot.setWebhook('{URL}'.format(URL=self.webhook_url))
