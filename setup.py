@@ -20,3 +20,4 @@ setuptools.setup(
     ],
     python_requires='>=3.6',
 )
+# https://packaging.python.org/tutorials/packaging-projects/
