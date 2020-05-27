@@ -1,4 +1,4 @@
-from EasyBot.EasyRun import EasyBot
+from EasyTeleBot.EasyRun import EasyBot
 
 file = open('json_file.json')
 easybot = EasyBot(file)

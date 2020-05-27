@@ -1,5 +1,5 @@
-from EasyBot.Act import Act
-from EasyBot.Generic import Object
+from EasyTeleBot.Act import Act
+from EasyTeleBot.Generic import Object
 
 
 class Chat:

@@ -3,8 +3,8 @@ from telegram.bot import Bot
 from telegram.replykeyboardremove import ReplyKeyboardRemove
 from telegram.replykeyboardmarkup import ReplyKeyboardMarkup
 
-from EasyBot.ActionTypes import *
-from EasyBot.Generic import GetFormatNames, Object
+from EasyTeleBot.ActionTypes import *
+from EasyTeleBot.Generic import GetFormatNames, Object
 
 
 def InitializeActs(acts_list: []):

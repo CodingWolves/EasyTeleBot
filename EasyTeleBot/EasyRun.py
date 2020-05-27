@@ -1,7 +1,7 @@
 from flask import Flask, request
 import telegram
-from EasyBot.Chat import Chat
-from EasyBot import Act
+from EasyTeleBot.Chat import Chat
+from EasyTeleBot import Act
 
 import io
 import json
@@ -20,7 +20,7 @@ class EasyBot:
         print("read config file - {}".format(config_text))
 
         if not config_text:
-            raise Exception("could not initialize EasyBot from config file")
+            raise Exception("could not initialize EasyTeleBot from config file")
 
         self.acts = Act.InitializeActs(config_text['actions'])
 
@@ -34,7 +34,7 @@ class EasyBot:
 
         url = parse.urlparse(self.webhook_url)
         if not url.scheme or not url.netloc:
-            raise Exception('EasyBot need to get webhook with http:// or https:// , got {}'.format(self.webhook_url))
+            raise Exception('EasyTeleBot need to get webhook with http:// or https:// , got {}'.format(self.webhook_url))
         self.webhook_base_url = url.scheme + "//" + url.netloc + "/"
         self.base_url = self.webhook_base_url
         self.webhook_url_path = url.path
@@ -49,13 +49,13 @@ class EasyBot:
         self.print_updates = False
 
         if not self.telegram_token or not self.acts or not self.webhook_url or not self.bot_name:
-            raise Exception("could not initialize EasyBot , missing parameter token={} acts={} url={}"
+            raise Exception("could not initialize EasyTeleBot , missing parameter token={} acts={} url={}"
                             .format(self.telegram_token, self.acts, self.webhook_url))
 
         self.set_webhook()
         self.app = Flask(__name__)
 
-        print("EasyBot created bot '{}' successfully".format(config_text['bot_name']))
+        print("EasyTeleBot created bot '{}' successfully".format(config_text['bot_name']))
 
         @self.app.route(self.webhook_url_path, methods=['POST'])
         def respond():
