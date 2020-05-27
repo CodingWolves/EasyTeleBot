@@ -6,6 +6,7 @@ from EasyBot import Act
 import io
 import json
 
+
 class EasyBot:
 
     def __init__(self, actions_file, token=str, url=str):

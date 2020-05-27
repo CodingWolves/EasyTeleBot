@@ -1,5 +1,4 @@
-import json
 from EasyBot.EasyRun import EasyBot
 
-file = open('json_file.txt')
+file = open('json_file.json')
 EasyBot(file)
