@@ -5,7 +5,7 @@ from EasyBot.Generic import Object
 class Chat:
     def __init__(self, easy_bot, message):
         self.id = message.chat.id
-        self.url = easy_bot.url
+        self.url = easy_bot.base_url
         self.acts = easy_bot.acts
         self.data = Object()
         self.data.user = Object()
