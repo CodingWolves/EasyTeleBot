@@ -1,21 +1,36 @@
 {
   "actions": [
     {
-        "id": 1,
+        "id": 0,
         "triggers": ["/start", "start"],
         "type": "text",
         "data": "Welcome to coolAvatar bot,the bot is using the service from http://avatars.adorable.io/to generate cool looking avatars based on the name you enterso please enter a name and the bot will reply with an avatar for your name."
     },
     {
-        "id": 2,
+        "id": 1,
         "triggers": ["hi", "hello", "hey"],
+        "type": "text",
+        "data": "server says hello back",
+        "next_act_id": 2
+    },
+    {
+        "id": 2,
+        "triggers": [],
+        "type": "text",
+        "data": "server got to this action right after action id 1, now you got markup options",
+        "markup_type": "reply",
+        "markup_data": "left top,right top:left bottom,right bottom"
+    },
+    {
+        "id": 12,
+        "triggers": ["fuck", "fuck you"],
         "type": "text",
         "data": "hello to you too",
         "markup_type": "reply",
         "markup_data": "left top,right top:left bottom,right bottom"
     },
     {
-        "id": 3,
+        "id": 13,
         "triggers": ["puppy"],
         "type": "animation",
         "data": "https://media.giphy.com/media/5awVf7q1nwkus/giphy.gif"
