@@ -38,7 +38,7 @@
       "id": 1011,
       "triggers": [],
       "type": "save",
-      "data": "{data.recent_text_received}",
+      "data": "{data.last_text_received}",
       "save_to_data_name": "name",
       "next_act_id": 1012
     },
@@ -46,7 +46,7 @@
       "id": 1012,
       "triggers": [],
       "type": "text",
-      "data": "your name is {data.recent_text_received}"
+      "data": "your name is {data.name}"
     }
   ],
   "telegram_token": "1089629759:AAFAwWzcSLxpuBWWGKTnwABeayNZ_QJsvxw",
