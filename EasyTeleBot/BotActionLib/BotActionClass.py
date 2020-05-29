@@ -3,7 +3,7 @@ from telegram.bot import Bot
 from telegram.replykeyboardremove import ReplyKeyboardRemove
 from telegram.replykeyboardmarkup import ReplyKeyboardMarkup
 
-from build.lib.EasyTeleBot.ActionTypes import MarkupType
+from EasyTeleBot.BotActionLib import MarkupType
 
 
 class BotAction(ABC):
