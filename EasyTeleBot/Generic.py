@@ -52,8 +52,6 @@ class Object(object):
         result = result[0:-2] + result[-1] + "}"
         return result
 
-    pass
-
     @classmethod
     def hasAttrNested(cls, var, attrs: str) -> bool:
         attr = attrs.split('.', 1)
@@ -62,6 +60,10 @@ class Object(object):
                 return Object.hasAttrNested(var.__getattribute__(attr[0]), attr[1])
             return True
         return False
+
+
+def DecodeUTF8(text: str):
+    return text.encode('utf-8').decode()
 
 
 def RemoveFormatName(text, format_name) -> str:

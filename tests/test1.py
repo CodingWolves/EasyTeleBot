@@ -1,8 +1,8 @@
-from EasyTeleBot.EasyRun import EasyBot
+import EasyTeleBot
 
 file = open('json_file.json')
-easybot = EasyBot(file)
-app = easybot.app
+easy_bot = EasyTeleBot.CreateEasyTelegramBot(file)
+app = easy_bot.flask_app
 
 if __name__ == '__main__':
     print('main function started')
