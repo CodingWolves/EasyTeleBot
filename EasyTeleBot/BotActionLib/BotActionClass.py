@@ -3,7 +3,7 @@ from telegram.bot import Bot
 from telegram.replykeyboardremove import ReplyKeyboardRemove
 from telegram.replykeyboardmarkup import ReplyKeyboardMarkup
 
-from EasyTeleBot.BotActionLib import MarkupType, GetBotActionById
+from EasyTeleBot.BotActionLib import MarkupType
 
 
 class BotAction(ABC):
@@ -16,10 +16,12 @@ class BotAction(ABC):
         self.follow_up_act_id = None
         if 'follow_up_act_id' in act:
             self.follow_up_act_id = act['follow_up_act_id']
+        self.follow_up_act = None
 
         self.next_act_id = None
         if 'next_act_id' in act:
             self.next_act_id = act['next_act_id']
+        self.next_act = None
 
         self.markup = None
         if 'markup_type' in act:
@@ -47,14 +49,12 @@ class BotAction(ABC):
     def PerformAction(self, bot: Bot, chat, message):
         result = None
         print("doing super() in act - {}".format(self.id))
-        if self.follow_up_act_id:
-            print("follow_up_act_id has been sent - {follow_up_act_id} from act - {act_id}".format(
-                follow_up_act_id=self.follow_up_act_id, act_id=self.id))
-            result = GetBotActionById(chat.bot_actions, self.follow_up_act_id)
+        if self.follow_up_act:
+            print("follow_up_act has been sent - {} from act - {}".format(self.follow_up_act_id, self.id))
+            result = self.follow_up_act
         if self.next_act_id:
-            print("next_act has been sent - {next_act_id} from act - {act_id}".format(next_act_id=self.next_act_id,
-                                                                                      act_id=self.id))
-            result = GetBotActionById(chat.bot_actions, self.next_act_id).PerformAction(bot, chat, message)
+            print("next_act has been sent - {} from act - {}".format(self.next_act_id, self.id))
+            result = self.next_act.PerformAction(bot, chat, message)
         print("sending")
         print(result)
         print("sent")

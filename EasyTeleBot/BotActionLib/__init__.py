@@ -10,6 +10,8 @@ def CreateBotActionsList(actions_list: []):
         raise Exception("could not initialize bot actions - '{}' need to be a list".format(actions_list))
     print("<<<<<<<<<<!!!Acts Creation Started!!!>>>>>>>>>>")
     bot_actions = [CreateBotActionFromDict(act_dict) for act_dict in actions_list]
+    for action in bot_actions:
+        ConfigureNextAndFollowUpActions(action, bot_actions)
     return bot_actions
 
 
@@ -27,6 +29,13 @@ def CreateBotActionFromDict(action_dict: dict):
     if action_type in ResponseTypeReferenceDictionary:
         command_class = ResponseTypeReferenceDictionary[action_type]
         return command_class(action_dict)
+
+
+def ConfigureNextAndFollowUpActions(action: BotAction, action_list: list):
+    if action.next_act_id:
+        action.next_act = GetBotActionById(action_list, action.next_act_id)
+    if action.follow_up_act_id:
+        action.follow_up_act = GetBotActionById(action_list, action.follow_up_act_id)
 
 
 def GetBotActionByTrigger(actions_list: list, trigger: str):
