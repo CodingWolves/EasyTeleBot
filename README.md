@@ -24,7 +24,7 @@ Use CreateEasyTelegramBot to create the bot it will create the whole bot automat
 Inside this class lays a flask app which you can get by typing - ```bot.flask_app```.
 Run this flask app to start handling the messages users sent to the bot.
 
-Tested Usages:
+Tested WSGI Usages:
 -[x] gunicorn ```gunicorn myapp:bot.flask_app```
 -[ ] nginx
 -[ ] Django
@@ -64,9 +64,12 @@ If there is a format, it will try to extract saved information, example "{data.n
 Optional attributes:
 - **"next_act_id"** - Do this ids action right after the this action finishes.
 - **"follow_up_act_id"** - The follow up action id, does this after the user sends back a message. This is for question actions.
-- **"markup_type"** - When sending a markup  
+- **"markup_type"** - When sending a markup, the users chat will have options to press, like "/start" and "/help".
+Every ',' will separate between words and every ':' will separate between rows.
+    - **"remove"** - Removes the previous markup the users chat has.
+    - **"reply"** - Sends the markup to the user, when the user presses on one, it minimizes it.
+    - **"static-reply"** - Sends the markup to the user, it will stay until you remove it.
 - **"markup_data"** - If "markup_type" is "reply" or "static-reply", uses this to make a list of reply keyboard options.
-- **""** - 
 
 #### Example action
 ```
@@ -75,7 +78,16 @@ Optional attributes:
     "id": 1,
     "triggers": ["hi", "hello", "hey"],
     "type": "text",
-    "data": "server says hello back"
+    "data": "server says hello back",
+    "next_act_id": 2
+},
+{
+    "id": 2,
+    "triggers": [],
+    "type": "text",
+    "data": "server got to this action right after action id 1, now you got markup options",
+    "markup_type": "reply",
+    "markup_data": "left top,right top:left bottom,right bottom"
 },
 ...
 ```
