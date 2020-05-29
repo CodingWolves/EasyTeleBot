@@ -17,6 +17,12 @@
         "triggers": ["ok", "okay", "OK", "Ok"],
         "type": "text",
         "data": "OK"
+    },
+    {
+        "id": 1,
+        "triggers": ["test1"],
+        "type": "text",
+        "data": "{data.gg}"
     }
   ],
   "telegram_token": "1089629759:AAFAwWzcSLxpuBWWGKTnwABeayNZ_QJsvxw",
