@@ -9,7 +9,7 @@ class TextResponse(BotAction):
         text_response_format = RemoveUnreachableFormats(text_response_format, chat)
         text_response = text_response_format.format(data=chat.data)
         if text_response == "":
-            print("error - act id {} tried sending a null text".format(self.id))
+            print("error - act id {} tried sending an empty text".format(self.id))
             return
         bot.sendMessage(chat_id=chat.id, text=text_response,
                         reply_to_message_id=message.message_id, reply_markup=self.markup)
@@ -24,7 +24,7 @@ class AnimationResponse(BotAction):
         url_format = RemoveUnreachableFormats(url_format, chat)
         url = url_format.format(data=chat.data)
         if url == "":
-            print("act id {} tried sending a null url animation".format(self.id))
+            print("act id {} tried sending an empty url animation".format(self.id))
             return
         bot.sendAnimation(chat_id=chat.id, animation=url,
                           reply_to_message_id=message.message_id, reply_markup=self.markup)
@@ -40,6 +40,6 @@ class PhotoResponse(BotAction):
 
 
 ResponseTypeReferenceDictionary = {
-    ActionType.Text: TextResponse,
-    ActionType.Animation: AnimationResponse,
+    ActionType.TextResponse: TextResponse,
+    ActionType.AnimationResponse: AnimationResponse,
 }
