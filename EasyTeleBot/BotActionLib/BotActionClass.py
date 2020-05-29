@@ -3,7 +3,7 @@ from telegram.bot import Bot
 from telegram.replykeyboardremove import ReplyKeyboardRemove
 from telegram.replykeyboardmarkup import ReplyKeyboardMarkup
 
-from EasyTeleBot.BotActionLib import MarkupType
+from EasyTeleBot.BotActionLib import MarkupType, GetBotActionById
 
 
 class BotAction(ABC):
@@ -50,11 +50,11 @@ class BotAction(ABC):
         if self.follow_up_act_id:
             print("follow_up_act_id has been sent - {follow_up_act_id} from act - {act_id}".format(
                 follow_up_act_id=self.follow_up_act_id, act_id=self.id))
-            result = BotAction.getActById(chat.bot_actions, self.follow_up_act_id)
+            result = GetBotActionById(chat.bot_actions, self.follow_up_act_id)
         if self.next_act_id:
             print("next_act has been sent - {next_act_id} from act - {act_id}".format(next_act_id=self.next_act_id,
                                                                                       act_id=self.id))
-            result = BotAction.getActById(chat.bot_actions, self.next_act_id).PerformAction(bot, chat, message)
+            result = GetBotActionById(chat.bot_actions, self.next_act_id).PerformAction(bot, chat, message)
         print("sending")
         print(result)
         print("sent")
