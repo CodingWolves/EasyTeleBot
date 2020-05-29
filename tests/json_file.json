@@ -20,10 +20,9 @@
     },
     {
         "id": 1001,
-        "triggers": ["action recursion"],
+        "triggers": ["test1"],
         "type": "text",
-        "data": "recursive action",
-        "next_act_id": 1001
+        "data": "{data.gg}"
     },
     {
       "id": 1010,

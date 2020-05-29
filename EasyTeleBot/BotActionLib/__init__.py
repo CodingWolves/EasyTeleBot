@@ -33,6 +33,8 @@ def CreateBotActionFromDict(action_dict: dict):
 
 def ConfigureNextAndFollowUpActions(action: BotAction, action_list: list):
     if action.next_act_id:
+        if action.id == action.next_act_id:
+            raise Exception("action cannot call itself, action id - '{}'".format(action.id))
         action.next_act = GetBotActionById(action_list, action.next_act_id)
     if action.follow_up_act_id:
         action.follow_up_act = GetBotActionById(action_list, action.follow_up_act_id)
