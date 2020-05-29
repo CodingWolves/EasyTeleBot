@@ -19,10 +19,34 @@
         "data": "OK"
     },
     {
-        "id": 1,
+        "id": 1001,
         "triggers": ["test1"],
         "type": "text",
         "data": "{data.gg}"
+    },
+    {
+      "id": 1010,
+      "triggers": [
+        "ask me my name",
+        "q name"
+      ],
+      "type": "text",
+      "data": "what is your name?",
+      "follow_up_act_id": 1011
+    },
+    {
+      "id": 1011,
+      "triggers": [],
+      "type": "save",
+      "data": "{data.recent_text_received}",
+      "save_to_data_name": "name",
+      "next_act_id": 1012
+    },
+    {
+      "id": 1012,
+      "triggers": [],
+      "type": "text",
+      "data": "your name is {data.recent_text_received}"
     }
   ],
   "telegram_token": "1089629759:AAFAwWzcSLxpuBWWGKTnwABeayNZ_QJsvxw",
