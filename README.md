@@ -3,7 +3,7 @@ EasyTeleBot is a package for creating an automated bot responder for telegram in
 
 The program uses flask and webhook to get user messages from telegram.
 
-##Installation
+## Installation
 Install the package by entering in terminal
  
 ```pip install easytelebot```
@@ -12,7 +12,7 @@ Package Dependencies:
 - flask
 - python-telegram-bot
 
-##Usage 
+## Usage 
 After importing the EasyTeleBot get the config json file in one of two ways:
 1. As string path ```config_file = "config_file.json"```
 1. As IO readable ```config_file = open("config_file.json")```
@@ -25,13 +25,13 @@ Inside this class lays a flask app which you can get by typing - ```bot.flask_ap
 Run this flask app to start handling the messages users sent to the bot.
 
 Tested WSGI Usages:
--[x] gunicorn ```gunicorn myapp:bot.flask_app```
--[ ] nginx
--[ ] Django
+- [x] gunicorn ```gunicorn myapp:bot.flask_app```
+- [ ] nginx
+- [ ] Django
 
 
 
-##Config File
+## Config File
 Create a config file in json format according to the next rules :
 1. **"telegram_token"** - Is the telegram api token you get after creating a new bot through [BotFather](https://telegram.me/BotFather).
 1. **"webhook_url"** - This is the url to tell telegram servers to forward the messages users send to bots chat,
