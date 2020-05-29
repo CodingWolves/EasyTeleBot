@@ -1,27 +1,17 @@
 from EasyTeleBot.BotActionLib import ActionType
 from EasyTeleBot.BotActionLib.BotActionClass import BotAction
-from EasyTeleBot.Generic import GetFormatNames, Object
+from EasyTeleBot.GenericFunctions import GetFormatNames, Object, RemoveFormatName, RemoveUnreachableFormats
 
 
 class TextResponse(BotAction):
     def PerformAction(self, bot, chat, message):
-        format_names = GetFormatNames(self.data)
-        print('found formant_name ')
-        print(format_names)
-        print("chat.data")
-        print(chat.data)
-        for name in format_names:
-            if not Object.hasAttrNested(chat, name):
-                print("error - trying to find {format_name} in chat.data but not found , chat_id={chat_id}".format(
-                    format_name=name.split('.', 1)[1], chat_id=chat.id))
-                bot.sendMessage(chat_id=chat.id, text='error - {} not found in Chat'.format(name),
-                                reply_to_message_id=message.message_id)
-                return
-        text = self.data.format(data=chat.data)
-        if text == "":
+        text_response_format = self.data
+        text_response_format = RemoveUnreachableFormats(text_response_format, chat)
+        text_response = text_response_format.format(data=chat.data)
+        if text_response == "":
             print("error - act id {} tried sending a null text".format(self.id))
             return
-        bot.sendMessage(chat_id=chat.id, text=text,
+        bot.sendMessage(chat_id=chat.id, text=text_response,
                         reply_to_message_id=message.message_id, reply_markup=self.markup)
         return super(TextResponse, self).PerformAction(bot, chat, message)
 
@@ -30,7 +20,9 @@ class TextResponse(BotAction):
 
 class AnimationResponse(BotAction):
     def PerformAction(self, bot, chat, message):
-        url = self.data.format(data=chat.data)
+        url_format = self.data
+        url_format = RemoveUnreachableFormats(url_format, chat)
+        url = url_format.format(data=chat.data)
         if url == "":
             print("act id {} tried sending a null url animation".format(self.id))
             return
