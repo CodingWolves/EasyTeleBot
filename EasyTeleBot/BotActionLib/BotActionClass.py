@@ -27,8 +27,8 @@ class BotAction(ABC):
 
             if 'markup_data' in act:
                 markup_string = act['markup_data']
-                options = [[item for item in row.split(",")] for row in
-                           markup_string.split(":")]  # convert it to lists in list
+                # convert it to lists in list
+                options = [[item for item in row.split(",")] for row in markup_string.split(":")]
 
                 if markup_type == MarkupType.OneTimeReply:
                     self.markup = ReplyKeyboardMarkup(options, one_time_keyboard=True)

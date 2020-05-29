@@ -1,5 +1,5 @@
 from EasyTeleBot.BotActionLib import GetBotActionByTrigger
-from EasyTeleBot.Generic import Object
+from EasyTeleBot.GenericFunctions import Object, DecodeUTF8
 
 
 class Chat:
@@ -13,22 +13,24 @@ class Chat:
         self.data.user.last_name = message.chat.last_name
         self.follow_up_bot_action = False
         self.unhandled_messages = []
+        self.last_text_received = None
 
-    def GotMessage(self, bot, message):
-        text = message.text.encode('utf-8').decode()
-        print("chat - {chat_id} got text_message = {text_message}".format(chat_id=self.id, text_message=text))
-        print("chat continue , follow_up_act={follow_up_act}".format(follow_up_act=self.follow_up_bot_action))
+    def GotTextMessage(self, bot, message):
+        text_received = DecodeUTF8(message.text)
+        self.last_text_received = text_received
+        print("chat - {} got text_message = {}".format(self.id, text_received))
+        print("follow_up_act={}".format(self.follow_up_bot_action))
         if self.follow_up_bot_action:
             print("found previous follow_up_act {id} , now acting".format(id=self.follow_up_bot_action.id))
             self.follow_up_bot_action = self.follow_up_bot_action.PerformAction(bot, self, message)
             return
 
-        print("after follow_up_act")
+        print("searching for action by trigger")
 
-        act = GetBotActionByTrigger(self.bot_actions, text)
-        if act is not None:
-            print("doing act - {id} after text = {text}".format(id=act.id, text=text))
-            self.follow_up_bot_action = act.PerformAction(bot, self, message)
+        bot_action = GetBotActionByTrigger(self.bot_actions, text_received)
+        if bot_action is not None:
+            print("doing act - {id} after text = {text}".format(id=bot_action.id, text=text_received))
+            self.follow_up_bot_action = bot_action.PerformAction(bot, self, message)
             if self.follow_up_bot_action:
                 print("got follow_up_act - {}".format(self.follow_up_bot_action.id))
 

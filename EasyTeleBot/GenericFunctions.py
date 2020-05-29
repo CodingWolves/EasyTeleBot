@@ -67,7 +67,7 @@ def DecodeUTF8(text: str):
 
 
 def RemoveFormatName(text, format_name) -> str:
-    remove_from_index = text.find('{' + format_name + ':')
+    remove_from_index = text.find('{' + format_name + '}')
     return text[:remove_from_index] + text[text.find('}', remove_from_index) + 1:]
 
 
@@ -88,12 +88,18 @@ def IsFormatNameInText(text: str, format_name: str) -> bool:
     return format_name in names
 
 
-def GetFormatValues(text, format_name):
-    start_index = text.find(':', text.find('{' + format_name + ':'))
-    end_index = text.find('}', start_index)
-    return text[start_index:end_index]
-
-
 # format of this function is "'1','2':'3','4'" to [['1','2']['3','4']]
-def ConvertStringToSquaredList(text):
-    return [(eval("[" + row + "]")) for row in text.split(":")]
+def ConvertStringToListsInList(text):
+    # Formats text in this order "'1','2':'3','4'" to [['1','2']['3','4']]
+    # ',' separates between items in list and ':' separates between lists
+
+    return [(item for item in row.split(',')) for row in text.split(":")]
+
+
+def RemoveUnreachableFormats(text_format: str, obj: Object):
+    new_text_format = text_format
+    format_names = GetFormatNames(text_format)
+    for format_name in format_names:
+        if not Object.hasAttrNested(obj, format_name):
+            new_text_format = RemoveFormatName(new_text_format, format_name)
+    return new_text_format
