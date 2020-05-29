@@ -10,7 +10,9 @@
         "id": 2,
         "triggers": ["hi", "hello", "hey"],
         "type": "text",
-        "data": "hello to you too"
+        "data": "hello to you too",
+        "markup_type": "reply",
+        "markup_data": "left top,right top:left bottom,right bottom"
     },
     {
         "id": 1000,
