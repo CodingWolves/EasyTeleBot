@@ -45,7 +45,7 @@
     },
     {
       "id": 1012,
-      "triggers": [],
+      "triggers": ["whats my name?", "what is my name?"],
       "type": "text",
       "data": "your name is {data.name}"
     }
