@@ -15,6 +15,12 @@
         "markup_data": "left top,right top:left bottom,right bottom"
     },
     {
+        "id": 3,
+        "triggers": ["puppy"],
+        "type": "animation",
+        "data": "https://media.giphy.com/media/5awVf7q1nwkus/giphy.gif"
+    },
+    {
         "id": 1000,
         "triggers": ["ok", "okay", "OK", "Ok"],
         "type": "text",
