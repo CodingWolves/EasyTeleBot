@@ -13,11 +13,10 @@ class Chat:
         self.data.user.last_name = message.chat.last_name
         self.follow_up_bot_action = False
         self.unhandled_messages = []
-        self.last_text_received = None
 
     def GotTextMessage(self, bot, message):
         text_received = DecodeUTF8(message.text)
-        self.last_text_received = text_received
+        self.data.last_text_received = text_received
         print("chat - {} got text_message = {}".format(self.id, text_received))
         print("follow_up_act={}".format(self.follow_up_bot_action))
         if self.follow_up_bot_action:
