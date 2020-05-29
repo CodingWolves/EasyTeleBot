@@ -1,5 +1,5 @@
 from EasyTeleBot.BotActionLib.BotActionClass import BotAction
-from EasyTeleBot.BotActionLib.BotActionTypes import *
+from EasyTeleBot.BotActionLib.ActionType import *
 from EasyTeleBot.BotActionLib.BotResponses import *
 from EasyTeleBot.BotActionLib.BotCommands import *
 

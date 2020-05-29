@@ -1,6 +1,6 @@
 from abc import ABC
 
-from EasyTeleBot.BotActionLib import BotActionType
+from EasyTeleBot.BotActionLib import ActionType
 from EasyTeleBot.BotActionLib.BotActionClass import BotAction
 from EasyTeleBot.Generic import DecodeUTF8
 
@@ -46,5 +46,5 @@ class SaveCommand(Command):
 
 
 CommandTypeReferenceDictionary = {
-    BotActionType.SaveCommand: SaveCommand,
+    ActionType.SaveCommand: SaveCommand,
 }

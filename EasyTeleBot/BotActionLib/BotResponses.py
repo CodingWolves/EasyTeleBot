@@ -1,4 +1,4 @@
-from EasyTeleBot.BotActionLib import BotActionType
+from EasyTeleBot.BotActionLib import ActionType
 from EasyTeleBot.BotActionLib.BotActionClass import BotAction
 from EasyTeleBot.Generic import GetFormatNames, Object
 
@@ -48,6 +48,6 @@ class PhotoResponse(BotAction):
 
 
 ResponseTypeReferenceDictionary = {
-    BotActionType.Text: TextResponse,
-    BotActionType.Animation: AnimationResponse,
+    ActionType.Text: TextResponse,
+    ActionType.Animation: AnimationResponse,
 }
