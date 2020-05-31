@@ -47,7 +47,6 @@
         "type": "text",
         "data": "{data.gg}"
     },
-    [
         {
           "id": 1010,
           "triggers": [
@@ -72,7 +71,6 @@
           "type": "text",
           "data": "your name is {data.name}"
         }
-    ]
   ],
   "telegram_token": "1089629759:AAFAwWzcSLxpuBWWGKTnwABeayNZ_QJsvxw",
   "webhook_url": "https://zahavy-easy-bot.herokuapp.com/1089629759:AAFAwWzcSLxpuBWWGKTnwABeayNZ_QJsvxw",
