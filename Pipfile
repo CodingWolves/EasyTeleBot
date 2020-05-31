@@ -11,7 +11,8 @@ gunicorn = "*"
 python-telegram-bot = "*"
 EasyBot = "*"
 tests = "*"
-pandas="*"
+pandas = "*"
+numpy = "*"
 
 [requires]
 

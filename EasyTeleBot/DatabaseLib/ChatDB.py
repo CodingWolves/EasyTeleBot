@@ -1,6 +1,8 @@
 import json
 import os
 
+import numpy
+
 from EasyTeleBot.Chat import Chat
 from EasyTeleBot.GenericFunctions import Object
 from EasyTeleBot.DatabaseLib.pandasDB import DB
@@ -21,6 +23,10 @@ def LoadChat(chat: Chat):
             value = chat_row[key]
             if value != value:
                 continue
+            if type(value) is numpy.int64:
+                value = int(value)
+            if type(value) is numpy.float64:
+                value = int(value)
             chat[key] = value
         data_dict = json.loads(chat_str)
         chat.data = Object.ConvertDictToObject(data_dict)
