@@ -9,7 +9,7 @@ class MessageClass(Object):
         super(MessageClass, self).__init__()
         self.message_id = message_id
         self.text = text
-        self.chat = Object
+        self.chat = Object()
         self.chat.id = chat_id
         self.chat.first_name = chat_first_name
         self.chat.last_name = chat_last_name
