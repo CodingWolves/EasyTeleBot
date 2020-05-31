@@ -2,8 +2,9 @@ from EasyTeleBot.BotActionLib import GetBotActionByTrigger
 from EasyTeleBot.GenericFunctions import Object, DecodeUTF8
 
 
-class Chat:
+class Chat(Object):
     def __init__(self, easy_bot, message):
+        super(Chat, self).__init__()
         self.id = message.chat.id
         self.url = easy_bot.base_url
         self.bot_actions = easy_bot.bot_actions
@@ -12,7 +13,6 @@ class Chat:
         self.data.user.first_name = message.chat.first_name
         self.data.user.last_name = message.chat.last_name
         self.follow_up_bot_action = False
-        self.unhandled_messages = []
 
     def GotTextMessage(self, bot, message):
         text_received = DecodeUTF8(message.text)

@@ -46,10 +46,30 @@ class Object(object):
             attr_value = self.__getattribute__(attr_name)
             if issubclass(type(attr_value), str):
                 value_format = "'{value}'"
-            elif issubclass(type(attr_value), int) or issubclass(type(attr_value), dict) or issubclass(type(attr_value), Object):
+            elif issubclass(type(attr_value), int) or issubclass(type(attr_value), dict)\
+                    or issubclass(type(attr_value), Object):
                 value_format = "{value}"
             result += (" '{key}': " + value_format + ", ").format(key=attr_name, value=attr_value)
         result = result[0:-2] + result[-1] + "}"
+        return result
+
+    def GetAsDict(self):
+        result = dict()
+        for attr in self._attributes:
+            attr_value = self.__getattribute__(attr)
+            if type(attr_value) is Object:
+                result[attr] = attr_value.GetAsDict()
+            result[attr] = attr_value
+        return result
+
+    @classmethod
+    def ConvertDictToObject(cls, d: dict):
+        result = cls()
+        for key in d.keys():
+            value = d[key]
+            if type(value) is dict:
+                value = cls.ConvertDictToObject(value)
+            result.__setattr__(key, value)
         return result
 
     @classmethod

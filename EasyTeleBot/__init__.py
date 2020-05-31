@@ -7,6 +7,8 @@ import io
 import json
 from urllib import parse
 
+from EasyTeleBot.DatabaseLib.ChatDB import LoadChat, SaveChat
+
 
 class EasyTelegramBot:
     def __init__(self):
@@ -84,7 +86,9 @@ def CreateEasyTelegramBot(config_file, telegram_token=None, webhook_url=None, bo
             current_chat = Chat(easy_telegram_bot, update.message)  # creates a new chat
             print("New chat added id = {}".format(update.message.chat.id))
             easy_telegram_bot.chats.append(current_chat)
+        LoadChat(current_chat)
         current_chat.GotTextMessage(easy_telegram_bot.bot, update.message)
+        SaveChat(current_chat)
         return 'ok'
 
     @easy_telegram_bot.flask_app.route('/set_webhook', methods=['GET', 'POST'])
