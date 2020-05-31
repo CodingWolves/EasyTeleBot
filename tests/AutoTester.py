@@ -1,10 +1,11 @@
 import json
 
+from EasyTeleBot.DatabaseLib.ChatDB import LoadChat, SaveChat
 from tests.messageTester import MessageClass, getCustomizedSequence, getSequenceFromActDict, getRandomSequenceFromActDict
 from EasyTeleBot.Chat import Chat
 from EasyTeleBot import EasyTelegramBot
-from random import randint
 import random
+from random import randint
 import datetime
 
 GarbageTexts = ['bot', 'ok', 'hi', '/start', 'help', 'q1', 'money money money', 'heroku', 'nadav', 'shish kabab']
@@ -33,18 +34,17 @@ def StartTester():
     bot_actions_list = easy_bot.bot_actions
     easy_bot.bot = BotClass()
 
-    chats_count = 1000
-    garbage_count = 100
+    chats_count = 100
+    garbage_count = 10
     customized_sequences_count = 20
-    smart_sequences_count = 20
+    smart_sequences_count = 1
 
-    first_messages = [MessageClass(message_id=randint(10000, 99999), text=getRandText(),
-                                   chat_id=randint(10000, 99999), chat_first_name='ido', chat_last_name='zany')
-                      for i in range(chats_count)]
+    first_messages = [(MessageClass(message_id=randint(10000, 99999), text=getRandText(),
+                                    chat_id=randint(1000, 9999999), chat_first_name='ido', chat_last_name='zany'))
+                      for _ in range(chats_count)]
     chats = [Chat(easy_bot, msg) for msg in first_messages]
     for chat in chats:
         assert issubclass(type(chat), Chat)
-
         msg_time = datetime.datetime.now()
         GarbageSender(easy_bot.bot, chat, garbage_count)
         garbage_total_time += datetime.datetime.now() - msg_time
@@ -53,10 +53,12 @@ def StartTester():
 
         custom_seq_time = datetime.datetime.now()
         for _ in range(customized_sequences_count):
+            LoadChat(chat)
             actions_currently_testing.clear()
-            sequence = getCustomizedSequence(randint(0, 10000))
+            sequence = getCustomizedSequence(random.randint(0, 10000))
             print('new customized sequence - {}'.format(sequence))
             SequenceSender(easy_bot.bot, chat, sequence)
+            SaveChat(chat)
         custom_seq_total_time += datetime.datetime.now() - custom_seq_time
 
         smart_seq_time = datetime.datetime.now()
@@ -74,11 +76,11 @@ def StartTester():
 def GarbageSender(bot, chat: Chat, count: int, text=None):
     messages = None
     if text:
-        messages = [MessageClass(message_id=randint(10000, 99999), text=text,
+        messages = [MessageClass(message_id=random.randint(10000, 99999), text=text,
                                  chat_id=chat.id, chat_first_name='ido', chat_last_name='zany')
                     for i in range(count)]
     else:
-        messages = [MessageClass(message_id=randint(10000, 99999), text=getRandText(),
+        messages = [MessageClass(message_id=random.randint(10000, 99999), text=getRandText(),
                                  chat_id=chat.id, chat_first_name='ido', chat_last_name='zany')
                     for i in range(count)]
     for msg in messages:
@@ -94,7 +96,7 @@ def SequenceSender(bot, chat: Chat, sequence):
     actions_currently_testing.clear()
     for text in sequence['texts']:
         print(chat.data.user.first_name)
-        chat.GotTextMessage(bot=bot, message=MessageClass(message_id=randint(10000, 99999), text=text,
+        chat.GotTextMessage(bot=bot, message=MessageClass(message_id=random.randint(10000, 99999), text=text,
                                                       chat_id=chat.id, chat_first_name='ido',
                                                       chat_last_name='zany'))
     CheckResponseActions(sequence)
