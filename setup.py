@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="EasyTeleBot",
-    version="0.0.1",
+    version="0.0.2",
     author="Ido Zahavy",
     author_email="idozahavy@gmail.com",
-    description="A small example package",
+    description="Configurable Telegram Bot package",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/idozahavy/EasyTeleBot",
