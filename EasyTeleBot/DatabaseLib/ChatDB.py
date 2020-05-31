@@ -29,11 +29,10 @@ def LoadChat(chat: Chat):
 def SaveChat(chat: Chat):
     chat_dict = chat.GetAsDict()
     chat_dict['data'] = str(chat_dict['data']).replace('\'', '\"')
-    for key in chat_dict.keys():
-        value = chat_dict[key]
-        if type(value) is list:
-            chat_dict[key] = ""
+    del chat_dict['bot_actions']
+    del chat_dict['url']
     db = DB(chat_db_path)
 
     db.AddRow(chat_dict, important_column='id')
     db.__save__()
+    print(chat_dict)

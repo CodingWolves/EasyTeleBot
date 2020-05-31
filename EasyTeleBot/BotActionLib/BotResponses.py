@@ -8,6 +8,7 @@ class TextResponse(BotAction):
         text_response_format = self.data
         text_response_format = RemoveUnreachableFormats(text_response_format, chat)
         text_response = text_response_format.format(data=chat.data)
+        print("text_response is - '{}'".format(text_response))
         if text_response == "":
             print("error - act id {} tried sending an empty text".format(self.id))
             return
