@@ -21,9 +21,13 @@ class Chat(Object):
         print("follow_up_act={}".format(self.follow_up_bot_action_id))
         if self.follow_up_bot_action_id:
             print("found previous follow_up_act {id} , now acting".format(id=self.follow_up_bot_action_id))
-            current_action = GetBotActionById(self.follow_up_bot_action_id)
+            current_action = GetBotActionById(self.bot_actions, self.follow_up_bot_action_id)
             follow_up_action = current_action.PerformAction(bot, self, message)
-            self.follow_up_bot_action_id = follow_up_action.id
+            if follow_up_action:
+                self.follow_up_bot_action_id = follow_up_action.id
+                print("got another follow_up_act - {}".format(self.follow_up_bot_action_id))
+            else:
+                self.follow_up_bot_action_id = False
             return
 
         print("searching for action by trigger")
@@ -32,8 +36,10 @@ class Chat(Object):
         if bot_action is not None:
             print("doing act - {id} after text = {text}".format(id=bot_action.id, text=text_received))
             follow_up_action = bot_action.PerformAction(bot, self, message)
-            self.follow_up_bot_action_id = follow_up_action.id
-            if self.follow_up_bot_action_id:
+            if follow_up_action:
+                self.follow_up_bot_action_id = follow_up_action.id
                 print("got follow_up_act - {}".format(self.follow_up_bot_action_id))
+            else:
+                self.follow_up_bot_action_id = False
 
         print("end GotMessage")

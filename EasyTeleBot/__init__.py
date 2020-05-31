@@ -12,7 +12,59 @@ from EasyTeleBot.DatabaseLib.ChatDB import LoadChat, SaveChat
 
 class EasyTelegramBot:
     def __init__(self):
-        return
+        self.telegram_token = None
+        self.webhook_url = None
+        self.webhook_base_url = None
+        self.webhook_url_path = None
+        self.base_url = None
+        self.bot = None
+        self.bot_name = None
+        self.bot_actions = None
+        self.chats = None
+        self.print_updates = None
+        self.flask_app = None
+
+    def Initialize(self, config_text, telegram_token=None, webhook_url=None, bot_name=None, print_updates=None, testing=False):
+        self.bot_actions = BotActionLib.CreateBotActionsList(config_text['actions'])
+
+        self.telegram_token = config_text['telegram_token']
+        if telegram_token:
+            self.telegram_token = telegram_token
+
+        self.webhook_url = config_text['webhook_url']
+        if webhook_url:
+            self.webhook_url = webhook_url
+
+        url = parse.urlparse(self.webhook_url)
+        if not url.scheme or not url.netloc:
+            raise Exception(
+                'EasyTeleBot need to get webhook with http:// or https:// , got {}'.format(
+                    self.webhook_url))
+        self.webhook_base_url = url.scheme + "//" + url.netloc + "/"
+        self.base_url = self.webhook_base_url
+        self.webhook_url_path = url.path
+        print('webhook path is = {}'.format(self.webhook_url_path))
+
+        self.bot_name = config_text['bot_name']
+        if bot_name:
+            self.bot_name = bot_name
+
+        self.chats = []
+        self.print_updates = False
+        if print_updates:
+            self.print_updates = print_updates
+
+        if not self.telegram_token or not self.bot_actions or not self.webhook_url or not self.bot_name:
+            raise Exception("could not initialize EasyTeleBot , missing parameter token={} acts={} url={}"
+                            .format(self.telegram_token, self.bot_actions,
+                                    self.webhook_url))
+
+        if not testing:
+            self.bot = telegram.Bot(token=self.telegram_token)
+            self.bot.setWebhook(self.webhook_url)
+            self.flask_app = Flask(self.bot_name)
+        else:
+            self.flask_app = None
 
 
 def CreateEasyTelegramBot(config_file, telegram_token=None, webhook_url=None, bot_name=None, print_updates=None):
@@ -22,47 +74,14 @@ def CreateEasyTelegramBot(config_file, telegram_token=None, webhook_url=None, bo
     if issubclass(type(config_file), io.IOBase):
         config_text = json.load(config_file)
 
-    easy_telegram_bot = EasyTelegramBot()
-
     print("read config file - {}".format(config_text))
 
     if not config_text:
         raise Exception("could not initialize EasyTeleBot from config file")
 
-    easy_telegram_bot.bot_actions = BotActionLib.CreateBotActionsList(config_text['actions'])
-
-    easy_telegram_bot.telegram_token = config_text['telegram_token']
-    if telegram_token:
-        easy_telegram_bot.telegram_token = telegram_token
-
-    easy_telegram_bot.webhook_url = config_text['webhook_url']
-    if webhook_url:
-        easy_telegram_bot.webhook_url = webhook_url
-
-    url = parse.urlparse(easy_telegram_bot.webhook_url)
-    if not url.scheme or not url.netloc:
-        raise Exception('EasyTeleBot need to get webhook with http:// or https:// , got {}'.format(easy_telegram_bot.webhook_url))
-    easy_telegram_bot.webhook_base_url = url.scheme + "//" + url.netloc + "/"
-    easy_telegram_bot.base_url = easy_telegram_bot.webhook_base_url
-    easy_telegram_bot.webhook_url_path = url.path
-    print('webhook path is = {}'.format(easy_telegram_bot.webhook_url_path))
-
-    easy_telegram_bot.bot_name = config_text['bot_name']
-    if bot_name:
-        easy_telegram_bot.bot_name = bot_name
-
-    easy_telegram_bot.bot = telegram.Bot(token=easy_telegram_bot.telegram_token)
-    easy_telegram_bot.chats = []
-    easy_telegram_bot.print_updates = False
-    if print_updates:
-        easy_telegram_bot.print_updates = print_updates
-
-    if not easy_telegram_bot.telegram_token or not easy_telegram_bot.bot_actions or not easy_telegram_bot.webhook_url or not easy_telegram_bot.bot_name:
-        raise Exception("could not initialize EasyTeleBot , missing parameter token={} acts={} url={}"
-                        .format(easy_telegram_bot.telegram_token, easy_telegram_bot.bot_actions, easy_telegram_bot.webhook_url))
-
-    easy_telegram_bot.bot.setWebhook(easy_telegram_bot.webhook_url)
-    easy_telegram_bot.flask_app = Flask(easy_telegram_bot.bot_name)
+    easy_telegram_bot = EasyTelegramBot()
+    easy_telegram_bot.Initialize(config_text, telegram_token=telegram_token, webhook_url=webhook_url,
+                                 bot_name=bot_name, print_updates=print_updates)
 
     print("EasyTeleBot created bot '{}' successfully".format(config_text['bot_name']))
 
@@ -98,3 +117,4 @@ def CreateEasyTelegramBot(config_file, telegram_token=None, webhook_url=None, bo
         return "webhook setup - {webhook}".format(webhook='ok' if webhook_ok else 'failed')
 
     return easy_telegram_bot
+
