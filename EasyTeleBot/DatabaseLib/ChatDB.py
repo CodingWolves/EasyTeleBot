@@ -13,6 +13,8 @@ def LoadChat(chat: Chat):
     db = DB(chat_db_path)
 
     chat_row = db.GetRowByColumnValue('id', chat.id)
+    if chat_row is None:
+        return
     chat_str = chat_row['data']
     if type(chat_str) is str:
         for key in chat_row.index:
