@@ -46,7 +46,7 @@ def getSequenceFromActDict(actions_list, act_id: int, chat=Object(), is_follow_u
             if len(action_class.triggers) > 0:
                 user_msg = action_class.triggers[randint(0, len(action_class.triggers)-1)]
                 user_messages.append(user_msg)
-            chat.data.last_received_text = user_msg
+            chat.data.last_text_received = user_msg
             data_formatted = RemoveUnreachableFormats(action_class.data, chat)
             server_msg = data_formatted.format(data=chat.data)
             if server_msg != "":
@@ -70,7 +70,7 @@ def getSequenceFromActDict(actions_list, act_id: int, chat=Object(), is_follow_u
     else:
         if type(action_class) is SaveCommand:
             action_class: SaveCommand
-            chat.data.last_received_text = getRandomInput()
+            chat.data.last_text_received = getRandomInput()
             user_msg = action_class.data.format(data=chat.data)
             user_messages.append(user_msg)
             data_name = action_class.save_to_data_name

@@ -3,7 +3,7 @@ import json
 from EasyTeleBot.DatabaseLib.ChatDB import LoadChat, SaveChat
 from tests.messageTester import MessageClass, getCustomizedSequence, getSequenceFromActDict, getRandomSequenceFromActDict
 from EasyTeleBot.Chat import Chat
-from EasyTeleBot import EasyTelegramBot
+from EasyTeleBot import EasyTelegramBot, CreateEasyTelegramBot
 import random
 from random import randint
 import datetime
@@ -25,18 +25,16 @@ def StartTester():
 
     print(random.random())
 
-    config_file = open('json_file.json')
-    config_text = json.load(config_file)
+    config_file = [open('json_file.json'), open('json_file2.json')]
 
-    easy_bot = EasyTelegramBot()
-    easy_bot.Initialize(config_text=config_text, testing=True)
+    easy_bot = CreateEasyTelegramBot(config_file, testing=True)
 
     bot_actions_list = easy_bot.bot_actions
     easy_bot.bot = BotClass()
 
-    chats_count = 100
+    chats_count = 1000
     garbage_count = 10
-    customized_sequences_count = 20
+    customized_sequences_count = 1
     smart_sequences_count = 1
 
     first_messages = [(MessageClass(message_id=randint(10000, 99999), text=getRandText(),
@@ -63,8 +61,10 @@ def StartTester():
 
         smart_seq_time = datetime.datetime.now()
         for _ in range(smart_sequences_count):
+            LoadChat(chat)
             sequence = getRandomSequenceFromActDict(actions_list=bot_actions_list, chat=chat)
             SequenceSender(easy_bot.bot, chat, sequence)
+            SaveChat(chat)
         smart_seq_total_time += datetime.datetime.now() - smart_seq_time
 
     print('chats count {}'.format(chats_count))
