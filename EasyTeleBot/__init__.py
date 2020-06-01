@@ -8,6 +8,7 @@ import json
 from urllib import parse
 
 from EasyTeleBot.DatabaseLib.ChatDB import LoadChat, SaveChat
+from EasyTeleBot.GenericFunctions import JoinDictionariesLists
 
 
 class EasyTelegramBot:
@@ -25,6 +26,12 @@ class EasyTelegramBot:
         self.flask_app = None
 
     def Initialize(self, config_text, telegram_token=None, webhook_url=None, bot_name=None, print_updates=None, testing=False):
+        if type(config_text) is list:
+            config_texts = config_text
+            config_text = {}
+            for text in config_texts:
+                config_text = JoinDictionariesLists(config_text, text)
+
         self.bot_actions = BotActionLib.CreateBotActionsList(config_text['actions'])
 
         self.telegram_token = config_text['telegram_token']
@@ -59,20 +66,27 @@ class EasyTelegramBot:
                             .format(self.telegram_token, self.bot_actions,
                                     self.webhook_url))
 
+        self.flask_app = Flask(self.bot_name)
+
         if not testing:
             self.bot = telegram.Bot(token=self.telegram_token)
             self.bot.setWebhook(self.webhook_url)
-            self.flask_app = Flask(self.bot_name)
-        else:
-            self.flask_app = None
 
 
-def CreateEasyTelegramBot(config_file, telegram_token=None, webhook_url=None, bot_name=None, print_updates=None):
+def CreateEasyTelegramBot(config_file, telegram_token=None, webhook_url=None, bot_name=None, print_updates=None, testing=False):
     config_text = None
     if type(config_file) is str:
         config_file = open(config_file)
     if issubclass(type(config_file), io.IOBase):
         config_text = json.load(config_file)
+    if type(config_file) is list:
+        config_files = config_file
+        if len(config_files) > 1:
+            if type(config_files[0]) is str:
+                config_files = [open(file) for file in config_files]
+            if issubclass(type(config_files[0]), io.IOBase):
+                config_text = [json.load(file) for file in config_files]
+
 
     print("read config file - {}".format(config_text))
 
@@ -81,9 +95,9 @@ def CreateEasyTelegramBot(config_file, telegram_token=None, webhook_url=None, bo
 
     easy_telegram_bot = EasyTelegramBot()
     easy_telegram_bot.Initialize(config_text, telegram_token=telegram_token, webhook_url=webhook_url,
-                                 bot_name=bot_name, print_updates=print_updates)
+                                 bot_name=bot_name, print_updates=print_updates, testing=testing)
 
-    print("EasyTeleBot created bot '{}' successfully".format(config_text['bot_name']))
+    print("EasyTeleBot created bot '{}' successfully".format(easy_telegram_bot.bot_name))
 
     @easy_telegram_bot.flask_app.route(easy_telegram_bot.webhook_url_path, methods=['POST'])
     def respond():

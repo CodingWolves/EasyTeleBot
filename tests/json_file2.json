@@ -1,0 +1,11 @@
+{
+  "actions": [
+    {
+      "id": 69,
+      "triggers": ["nooooooo", "no", "N"],
+      "type": "text",
+      "data": "you maniac"
+    }
+  ],
+  "blop": 123
+}
