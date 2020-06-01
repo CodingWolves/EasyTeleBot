@@ -13,6 +13,7 @@ class Chat(Object):
         self.data.user.first_name = message.chat.first_name
         self.data.user.last_name = message.chat.last_name
         self.follow_up_bot_action_id = False
+        self.db_row = None
 
     def GotTextMessage(self, bot, message):
         text_received = DecodeUTF8(message.text)

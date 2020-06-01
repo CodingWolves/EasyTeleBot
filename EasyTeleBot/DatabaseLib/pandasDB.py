@@ -8,11 +8,11 @@ class DB:
         self.data: DataFrame
         self.csv_path = csv_path
         if isfile(self.csv_path):
-            self.data = read_csv(csv_path)
+            self.data = read_csv(csv_path, memory_map=True)
         else:
             open(self.csv_path, 'x')
             print("created new file at path - '{}'".format(self.csv_path))
-            self.data = read_csv(csv_path)
+            self.data = read_csv(csv_path, memory_map=True)
 
     def AddRow(self, item, important_column=None):
         if important_column:
@@ -39,19 +39,34 @@ class DB:
                 self.data.update(DataFrame(data=updated_row, index=[row.name]), overwrite=True)
 
     def GetRowByColumnValue(self, column_name: str, column_value):
-        for row in self.data.iloc:
-            if row[column_name] == column_value:
-                return row
-        else:
+        frame_result = self.data.loc[self.data[column_name] == column_value]
+        if frame_result.empty:
             return None
+        row_result = frame_result.iloc[0]
+        return row_result
 
     def GetUnusedIndex(self):
         if self.data.empty:
             return 0
         return self.data.index.values.max()
 
+    def SaveRow(self, row: int):
+        self.data.to_csv(self.csv_path, index=False)
+
     def __save__(self):
         self.data.to_csv(self.csv_path, index=False)
 
     def __load__(self):
         self.data = read_csv(self.csv_path, memory_map=True)
+
+    @classmethod
+    def GetChatOnlyRow(cls, csv_path, chat):
+        row = 0
+        if chat.db_row is not None:
+            row = chat.db_row
+        csv = read_csv(csv_path, skiprows=range(1, row + 1, 1), nrows=1, memory_map=True)
+        if type(csv) is DataFrame:
+            for row in csv.iloc:
+                if row['id'] == chat.id:
+                    return row
+        return None
