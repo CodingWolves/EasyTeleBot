@@ -46,6 +46,10 @@ Create a config file in json format according to these rules :
 1. **"bot_name"** - Your bot name. Will make the flask server with this name.
 1. [**"actions"**](https://github.com/idozahavy/EasyTeleBot#action) - A list of actions to configure the bot behavior.
 
+Optional:
+
+- **"default_action_id"** - If no action triggers this action id will perform.
+
 #### Example config_file.json
 ```
 {
@@ -54,7 +58,9 @@ Create a config file in json format according to these rules :
     ]  
     "telegram_token": "example_token:KG5Gdv6AK05aeGctf25",
     "webhook_url": "https://example-server.herokuapp.com/example-identifier",
-    "bot_name": "example_bot"
+    "bot_name": "example_bot",
+
+    "default_action_id": 50621
 }
 ```
 
