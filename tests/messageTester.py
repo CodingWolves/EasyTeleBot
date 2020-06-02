@@ -1,5 +1,5 @@
 from EasyTeleBot.GenericFunctions import Object, RemoveUnreachableFormats
-from EasyTeleBot.BotActionLib import ActionType, TextResponse, AnimationResponse, SaveCommand
+from EasyTeleBot.BotActionLib import ActionType, TextResponse, AnimationResponse, SaveCommand, CalculateCommand
 from EasyTeleBot.BotActionLib.BotActionClass import BotAction
 from random import randint
 
@@ -75,6 +75,8 @@ def getSequenceFromActDict(actions_list, act_id: int, chat=Object(), is_follow_u
             user_messages.append(user_msg)
             data_name = action_class.save_to_data_name
             chat.data[data_name] = user_msg.format(data=chat.data)
+        elif type(action_class) is CalculateCommand:
+            return {'texts': [], 'responses': []}
         else:
             raise Exception('102')
 
@@ -114,5 +116,8 @@ message_sequences = [
      },
     {'texts': ["ok", "okay", "OK", "Ok"],
      'responses': ['OK', 'OK', 'OK', 'OK']
+     },
+    {'texts': ["math", "1+1"],
+     'responses': ['enter math expression', '2.0']
      },
 ]

@@ -32,10 +32,10 @@ def StartTester():
     bot_actions_list = easy_bot.bot_actions
     easy_bot.bot = BotClass()
 
-    chats_count = 1000
-    garbage_count = 10
-    customized_sequences_count = 1
-    smart_sequences_count = 1
+    chats_count = 100
+    garbage_count = 1
+    customized_sequences_count = 10
+    smart_sequences_count = 0
 
     first_messages = [(MessageClass(message_id=randint(10000, 99999), text=getRandText(),
                                     chat_id=randint(1000, 9999999), chat_first_name='ido', chat_last_name='zany'))
