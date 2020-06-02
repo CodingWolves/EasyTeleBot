@@ -19,6 +19,7 @@ After importing the EasyTeleBot get the config json file in one of two ways:
 
 1. As string path `config_file = "config_file.json"`
 1. As IO readable `config_file = open("config_file.json")`
+1. As a **list** of the two above `config_files = [config_file1, config_file2]`
 
 Use CreateEasyTelegramBot to create the bot it will create the whole bot automatically.
 
@@ -32,6 +33,7 @@ Tested WSGI Usages:
 - [ ] nginx
 - [ ] Django
 
+Telegram bot chats start with the word `"/start"` so you should enter this kind of action 
 
 
 ## Config File
@@ -157,6 +159,22 @@ Usually **you should** use it to save user input like this example:
 },
 ```
 
-
-
-
+### calculate
+Calculates the expression in `"data"` using math and saving it into `"calculate_result"`.
+```
+...
+{
+    "id": 1
+    "triggers": ["calculate expression"],
+    "type": "calculate",
+    "data": "5^5",
+    "next_act_id": 2
+},
+{
+    "id": 2,
+    "triggers": [],
+    "type": "text",
+    "data": "5^5 = {data.calculate_result}"
+}
+...
+```

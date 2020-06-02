@@ -47,30 +47,30 @@
         "type": "text",
         "data": "{data.gg}"
     },
-        {
-          "id": 1010,
-          "triggers": [
-            "ask me my name",
-            "q name"
-          ],
-          "type": "text",
-          "data": "what is your name?",
-          "follow_up_act_id": 1011
-        },
-        {
-          "id": 1011,
-          "triggers": [],
-          "type": "save",
-          "data": "{data.last_text_received}",
-          "save_to_data_name": "name",
-          "next_act_id": 1012
-        },
-        {
-          "id": 1012,
-          "triggers": ["whats my name?", "what is my name?"],
-          "type": "text",
-          "data": "your name is {data.name}"
-        }
+    {
+      "id": 1010,
+      "triggers": [
+        "ask me my name",
+        "q name"
+      ],
+      "type": "text",
+      "data": "what is your name?",
+      "follow_up_act_id": 1011
+    },
+    {
+      "id": 1011,
+      "triggers": [],
+      "type": "save",
+      "data": "{data.last_text_received}",
+      "save_to_data_name": "name",
+      "next_act_id": 1012
+    },
+    {
+      "id": 1012,
+      "triggers": ["whats my name?", "what is my name?"],
+      "type": "text",
+      "data": "your name is {data.name}"
+    }
   ],
   "telegram_token": "1089629759:AAFAwWzcSLxpuBWWGKTnwABeayNZ_QJsvxw",
   "webhook_url": "https://zahavy-easy-bot.herokuapp.com/1089629759:AAFAwWzcSLxpuBWWGKTnwABeayNZ_QJsvxw",
