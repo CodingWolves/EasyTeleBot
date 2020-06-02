@@ -26,7 +26,7 @@ class EasyTelegramBot:
         self.print_updates = None
         self.flask_app = None
 
-    def Initialize(self, config_text, telegram_token=None, webhook_url=None, bot_name=None, print_updates=None, testing=False):
+    def Initialize(self, config_text, telegram_token=None, webhook_url=None, bot_name=None, default_action_id=None,print_updates=None, testing=False):
         if type(config_text) is list:
             config_texts = config_text
             config_text = {}
@@ -69,6 +69,12 @@ class EasyTelegramBot:
             raise Exception("bot_name not found")
 
         self.chats = []
+
+        if 'default_action_id' in config_text:
+            self.default_action_id = config_text['default_action_id']
+        if default_action_id is not None:
+            self.default_action_id = default_action_id
+
         self.print_updates = False
         if print_updates:
             self.print_updates = print_updates

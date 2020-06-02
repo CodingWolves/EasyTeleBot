@@ -121,4 +121,8 @@ message_sequences = [
     {'texts': ["math", "1+1"],
      'responses': ['enter math expression', '2.0']
      },
+    {'texts': ["123456"],
+     'responses': ['hello to you too']
+     },
+
 ]

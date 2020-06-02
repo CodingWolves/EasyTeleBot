@@ -8,6 +8,7 @@ class Chat(Object):
         self.id = message.chat.id
         self.url = easy_bot.base_url
         self.bot_actions = easy_bot.bot_actions
+        self.default_action_id = easy_bot.default_action_id
         self.data = Object()
         self.data.user = Object()
         self.data.user.first_name = message.chat.first_name
@@ -42,5 +43,11 @@ class Chat(Object):
                 print("got follow_up_act - {}".format(self.follow_up_bot_action_id))
             else:
                 self.follow_up_bot_action_id = False
+        elif self.default_action_id and type(self.default_action_id) is int:
+            default_action = GetBotActionById(self.bot_actions, self.default_action_id)
+            follow_up_action = default_action.PerformAction(bot, self, message)
+            if follow_up_action:
+                self.follow_up_bot_action_id = follow_up_action.id
+                print("got another follow_up_act after default - {}".format(self.follow_up_bot_action_id))
 
         print("end GotMessage")

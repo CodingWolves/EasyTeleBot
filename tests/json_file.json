@@ -72,6 +72,7 @@
       "data": "your name is {data.name}"
     }
   ],
+  "default_action_id": 12,
   "telegram_token": "1089629759:AAFAwWzcSLxpuBWWGKTnwABeayNZ_QJsvxw",
   "webhook_url": "https://zahavy-easy-bot.herokuapp.com/1089629759:AAFAwWzcSLxpuBWWGKTnwABeayNZ_QJsvxw",
   "bot_name": "zahav_bot"
