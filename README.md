@@ -68,8 +68,8 @@ If there is a format, it will try to extract saved information, example `"{data.
 `"{data.last_text_received}"` will change into the last text message the user sent to chat.
 
 Optional attributes:
-- **"next_act_id"** - Do this ids action right after the this action finishes.
-- **"follow_up_act_id"** - The follow up action id, does this after the user sends back a message. This is for question actions.
+- **"next_action_id"** - Do this ids action right after the this action finishes.
+- **"follow_up_action_id"** - The follow up action id, does this after the user sends back a message. This is for question actions.
 - **"markup_type"** - When sending a markup, the users chat will have options to press, like `"/start"` and `"/help"`.
 Every `','` will separate between words and every `':'` will separate between rows.
     - **"remove"** - Removes the previous markup the users chat has.
@@ -77,7 +77,7 @@ Every `','` will separate between words and every `':'` will separate between ro
     - **"static-reply"** - Sends the markup to the user, it will stay until you remove it.
 - **"markup_data"** - If `"markup_type"` is `"reply"` or `"static-reply"`, uses this to make a list of reply keyboard options.
 
-**Do not** use both `"next_act_id"` and `"follow_up_act_id"` in the same action. Use only one of them or none.
+**Do not** use both `"next_action_id"` and `"follow_up_action_id"` in the same action. Use only one of them or none.
 
 #### Example action
 ```
@@ -87,7 +87,7 @@ Every `','` will separate between words and every `':'` will separate between ro
     "triggers": ["hi", "hello", "hey"],
     "type": "text",
     "data": "server says hello back",
-    "next_act_id": 2
+    "next_action_id": 2
 },
 {
     "id": 2,
@@ -141,7 +141,7 @@ Usually **you should** use it to save user input like this example:
     "triggers": ["save my name"],
     "type": "text",
     "data": "please enter your name",
-    "follow_up_act_id": 2
+    "follow_up_action_id": 2
 },
 {
     "id": 2,
@@ -149,7 +149,7 @@ Usually **you should** use it to save user input like this example:
     "type": "save",
     "data": "{data.last_text_received}",
     "save_to_data_name": "name",
-    "next_act_id": 3
+    "next_action_id": 3
 },
 {
     "id": 3,
@@ -168,7 +168,7 @@ Calculates the expression in `"data"` using math and saving it into `"calculate_
     "triggers": ["calculate expression"],
     "type": "calculate",
     "data": "5^5",
-    "next_act_id": 2
+    "next_action_id": 2
 },
 {
     "id": 2,

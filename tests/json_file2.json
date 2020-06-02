@@ -5,14 +5,14 @@
       "triggers": ["math"],
       "type": "text",
       "data": "enter math expression",
-      "follow_up_act_id": 52
+      "follow_up_action_id": 52
     },
     {
       "id": 52,
       "triggers": [],
       "type": "calculate",
       "data": "{data.last_text_received}",
-      "next_act_id": 53
+      "next_action_id": 53
     },
     {
       "id": 53,

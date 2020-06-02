@@ -27,16 +27,16 @@ def getRandomSequenceFromActDict(actions_list, chat=Object()):
     return getSequenceFromActDict(actions_list, actions_list[index].id, chat=chat)
 
 
-def getSequenceFromActDict(actions_list, act_id: int, chat=Object(), is_follow_up=False, is_next_act=False):
+def getSequenceFromActDict(actions_list, action_id: int, chat=Object(), is_follow_up=False, is_next_act=False):
     action_class = None
     action_class: BotAction
     for act in actions_list:
-        if act.id == act_id:
+        if act.id == action_id:
             action_class = act
             break
     if not action_class:
-        raise Exception('cant find id - {}'.format(act_id))
-    print('act_id - {} , is_follow_up - {} , data - {}'.format(act_id, is_follow_up, chat))
+        raise Exception('cant find id - {}'.format(action_id))
+    print('action_id - {} , is_follow_up - {} , data - {}'.format(action_id, is_follow_up, chat))
 
     user_messages = []
     server_messages = []
@@ -83,15 +83,15 @@ def getSequenceFromActDict(actions_list, act_id: int, chat=Object(), is_follow_u
     if is_next_act:
         user_messages.clear()
 
-    if action_class.next_act_id:
-        next_act_message = getSequenceFromActDict(actions_list, action_class.next_act_id, chat=chat, is_next_act=True)
+    if action_class.next_action_id:
+        next_act_message = getSequenceFromActDict(actions_list, action_class.next_action_id, chat=chat, is_next_act=True)
         for user_msg in next_act_message['texts']:
             user_messages.append(user_msg)
         for server_msg in next_act_message['responses']:
             server_messages.append(server_msg)
 
-    elif action_class.follow_up_act_id:
-        follow_up_act_message = getSequenceFromActDict(actions_list, action_class.follow_up_act_id,
+    elif action_class.follow_up_action_id:
+        follow_up_act_message = getSequenceFromActDict(actions_list, action_class.follow_up_action_id,
                                                        chat=chat, is_follow_up=True)
         for user_msg in follow_up_act_message['texts']:
             user_messages.append(user_msg)
@@ -112,7 +112,8 @@ message_sequences = [
      'responses': ['what is your name?', 'your name is cookie']
      },
     {'texts': ['fuck', 'hello'],
-     'responses': ['hello to you too', 'server says hello back', 'server got to this action right after action id 1, now you got markup options']
+     'responses': ['hello to you too', 'server says hello back', 'server got to this action right after action id 1, '
+                                                                 'now you got markup options']
      },
     {'texts': ["ok", "okay", "OK", "Ok"],
      'responses': ['OK', 'OK', 'OK', 'OK']

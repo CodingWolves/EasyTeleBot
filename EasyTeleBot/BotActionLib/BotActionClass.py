@@ -13,14 +13,14 @@ class BotAction(ABC):
         self.triggers = act['triggers']
         self.data = act['data']
 
-        self.follow_up_act_id = None
-        if 'follow_up_act_id' in act:
-            self.follow_up_act_id = act['follow_up_act_id']
+        self.follow_up_action_id = None
+        if 'follow_up_action_id' in act:
+            self.follow_up_action_id = act['follow_up_action_id']
         self.follow_up_act = None
 
-        self.next_act_id = None
-        if 'next_act_id' in act:
-            self.next_act_id = act['next_act_id']
+        self.next_action_id = None
+        if 'next_action_id' in act:
+            self.next_action_id = act['next_action_id']
         self.next_act = None
 
         self.markup = None
@@ -50,10 +50,10 @@ class BotAction(ABC):
         result = None
         print("doing super() in act - {}".format(self.id))
         if self.follow_up_act:
-            print("follow_up_act has been sent - {} from act - {}".format(self.follow_up_act_id, self.id))
+            print("follow_up_act has been sent - {} from act - {}".format(self.follow_up_action_id, self.id))
             result = self.follow_up_act
-        if self.next_act_id:
-            print("next_act has been sent - {} from act - {}".format(self.next_act_id, self.id))
+        if self.next_action_id:
+            print("next_act has been sent - {} from act - {}".format(self.next_action_id, self.id))
             result = self.next_act.PerformAction(bot, chat, message)
         print("sending")
         print(result)

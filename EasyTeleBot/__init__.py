@@ -22,6 +22,7 @@ class EasyTelegramBot:
         self.bot_name = None
         self.bot_actions = None
         self.chats = None
+        self.default_action_id = None
         self.print_updates = None
         self.flask_app = None
 
@@ -32,15 +33,23 @@ class EasyTelegramBot:
             for text in config_texts:
                 config_text = JoinDictionariesLists(config_text, text)
 
+        if 'actions' not in config_text:
+            raise Exception("actions not found")
         self.bot_actions = BotActionLib.CreateBotActionsList(config_text['actions'])
 
-        self.telegram_token = config_text['telegram_token']
+        if 'telegram_token' in config_text:
+            self.telegram_token = config_text['telegram_token']
         if telegram_token:
             self.telegram_token = telegram_token
+        if self.telegram_token is None:
+            raise Exception("telegram_token not found")
 
-        self.webhook_url = config_text['webhook_url']
+        if 'webhook_url' in config_text:
+            self.webhook_url = config_text['webhook_url']
         if webhook_url:
             self.webhook_url = webhook_url
+        if self.webhook_url is None:
+            raise Exception("webhook_url not found")
 
         url = parse.urlparse(self.webhook_url)
         if not url.scheme or not url.netloc:
@@ -52,19 +61,17 @@ class EasyTelegramBot:
         self.webhook_url_path = url.path
         print('webhook path is = {}'.format(self.webhook_url_path))
 
-        self.bot_name = config_text['bot_name']
+        if 'bot_name' in config_text:
+            self.bot_name = config_text['bot_name']
         if bot_name:
             self.bot_name = bot_name
+        if self.bot_name is None:
+            raise Exception("bot_name not found")
 
         self.chats = []
         self.print_updates = False
         if print_updates:
             self.print_updates = print_updates
-
-        if not self.telegram_token or not self.bot_actions or not self.webhook_url or not self.bot_name:
-            raise Exception("could not initialize EasyTeleBot , missing parameter token={} acts={} url={}"
-                            .format(self.telegram_token, self.bot_actions,
-                                    self.webhook_url))
 
         self.flask_app = Flask(self.bot_name)
 

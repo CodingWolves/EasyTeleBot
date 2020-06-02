@@ -11,7 +11,7 @@
         "triggers": ["hi", "hello", "hey"],
         "type": "text",
         "data": "server says hello back",
-        "next_act_id": 2
+        "next_action_id": 2
     },
     {
         "id": 2,
@@ -55,7 +55,7 @@
       ],
       "type": "text",
       "data": "what is your name?",
-      "follow_up_act_id": 1011
+      "follow_up_action_id": 1011
     },
     {
       "id": 1011,
@@ -63,7 +63,7 @@
       "type": "save",
       "data": "{data.last_text_received}",
       "save_to_data_name": "name",
-      "next_act_id": 1012
+      "next_action_id": 1012
     },
     {
       "id": 1012,
