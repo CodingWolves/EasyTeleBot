@@ -3,7 +3,6 @@
 *.bat
 *Pypi*
 *_test.py
-setup.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
