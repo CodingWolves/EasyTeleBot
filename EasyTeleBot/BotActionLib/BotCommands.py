@@ -51,7 +51,7 @@ class SaveCommand(Command):
 
 class CalculateCommand(Command):
     def __init__(self, act: dict):
-        super(SaveCommand, self).__init__(act)
+        super(CalculateCommand, self).__init__(act)
 
     def PerformAction(self, bot, chat, message):
         text_message = DecodeUTF8(message.text)
@@ -64,7 +64,7 @@ class CalculateCommand(Command):
 
         print("data has been calculated  ,,,  chat_id - {} , value={}"
               .format(chat.id, chat.data['calculate_result']))
-        return super(SaveCommand, self).PerformAction(bot, chat, message)
+        return super(CalculateCommand, self).PerformAction(bot, chat, message)
 
 
 CommandTypeReferenceDictionary = {
