@@ -1,5 +1,7 @@
 from abc import ABC
 
+import StringCalculator
+
 from EasyTeleBot.BotActionLib import ActionType
 from EasyTeleBot.BotActionLib.BotActionClass import BotAction
 from EasyTeleBot.GenericFunctions import DecodeUTF8, RemoveUnreachableFormats
@@ -47,6 +49,25 @@ class SaveCommand(Command):
         return super(SaveCommand, self).PerformAction(bot, chat, message)
 
 
+class CalculateCommand(Command):
+    def __init__(self, act: dict):
+        super(SaveCommand, self).__init__(act)
+
+    def PerformAction(self, bot, chat, message):
+        text_message = DecodeUTF8(message.text)
+        calculate_text_format = self.data
+        calculate_text_format = RemoveUnreachableFormats(calculate_text_format, chat)
+        calculate_text = calculate_text_format.format(data=chat.data)
+
+        calculate_result = StringCalculator.SolveMathProblem(calculate_text)
+        chat.data['calculate_result'] = calculate_result
+
+        print("data has been calculated  ,,,  chat_id - {} , value={}"
+              .format(chat.id, chat.data['calculate_result']))
+        return super(SaveCommand, self).PerformAction(bot, chat, message)
+
+
 CommandTypeReferenceDictionary = {
     ActionType.SaveCommand: SaveCommand,
+    ActionType.CalculateCommand: CalculateCommand,
 }

@@ -1,11 +1,24 @@
 {
   "actions": [
     {
-      "id": 69,
-      "triggers": ["nooooooo", "no", "N"],
+      "id": 51,
+      "triggers": ["math"],
       "type": "text",
-      "data": "you maniac"
+      "data": "enter math expression",
+      "follow_up_act_id": 52
+    },
+    {
+      "id": 52,
+      "triggers": [],
+      "type": "calculate",
+      "data": "{data.last_text_received}",
+      "next_act_id": 53
+    },
+    {
+      "id": 53,
+      "triggers": ["result"],
+      "type": "text",
+      "data": "{data.calculate_result}"
     }
-  ],
-  "blop": 123
+  ]
 }
