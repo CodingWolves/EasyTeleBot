@@ -36,7 +36,7 @@ def getSequenceFromActDict(actions_list, action_id: int, chat=Object(), is_follo
             break
     if not action_class:
         raise Exception('cant find id - {}'.format(action_id))
-    print('action_id - {} , is_follow_up - {} , data - {}'.format(action_id, is_follow_up, chat))
+    print('action_id - {} , is_follow_up - {} , chat - {}'.format(action_id, is_follow_up, chat))
 
     user_messages = []
     server_messages = []
