@@ -29,8 +29,12 @@ def LoadChat(chat: Chat):
                 continue
             if type(value) is numpy.int64:
                 value = int(value)
-            if type(value) is numpy.float64:
+            elif type(value) is numpy.float64:
                 value = int(value)
+            elif value == "False":
+                value = False
+            elif value == "True":
+                value = True
             chat[key] = value
         data_dict = json.loads(chat_str)
         chat.data = Object.ConvertDictToObject(data_dict)
