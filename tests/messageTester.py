@@ -84,18 +84,18 @@ def getSequenceFromActDict(actions_list, action_id: int, chat=Object(), is_follo
         user_messages.clear()
 
     if action_class.next_action_id:
-        next_act_message = getSequenceFromActDict(actions_list, action_class.next_action_id, chat=chat, is_next_act=True)
-        for user_msg in next_act_message['texts']:
+        next_action_message = getSequenceFromActDict(actions_list, action_class.next_action_id, chat=chat, is_next_act=True)
+        for user_msg in next_action_message['texts']:
             user_messages.append(user_msg)
-        for server_msg in next_act_message['responses']:
+        for server_msg in next_action_message['responses']:
             server_messages.append(server_msg)
 
     elif action_class.follow_up_action_id:
-        follow_up_act_message = getSequenceFromActDict(actions_list, action_class.follow_up_action_id,
+        follow_up_action_message = getSequenceFromActDict(actions_list, action_class.follow_up_action_id,
                                                        chat=chat, is_follow_up=True)
-        for user_msg in follow_up_act_message['texts']:
+        for user_msg in follow_up_action_message['texts']:
             user_messages.append(user_msg)
-        for server_msg in follow_up_act_message['responses']:
+        for server_msg in follow_up_action_message['responses']:
             server_messages.append(server_msg)
 
     return {'texts': user_messages, 'responses': server_messages}

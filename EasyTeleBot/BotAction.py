@@ -7,7 +7,7 @@ def CreateBotActionsList(actions_list: []):
     if actions_list is None and issubclass(type(actions_list), list):
         raise Exception("could not initialize bot actions - '{}' need to be a list".format(actions_list))
     print("<<<<<<<<<<!!!Acts Creation Started!!!>>>>>>>>>>")
-    bot_actions = [CreateBotActionFromDict(act_dict) for act_dict in actions_list]
+    bot_actions = [CreateBotActionFromDict(action_dict) for action_dict in actions_list]
     for action in bot_actions:
         ConfigureNextAndFollowUpActions(action, bot_actions)
     return bot_actions
@@ -33,9 +33,9 @@ def ConfigureNextAndFollowUpActions(action: BotAction, action_list: list):
     if action.next_action_id:
         if action.id == action.next_action_id:
             raise Exception("action cannot call itself, action id - '{}'".format(action.id))
-        action.next_act = GetBotActionById(action_list, action.next_action_id)
+        action.next_action = GetBotActionById(action_list, action.next_action_id)
     if action.follow_up_action_id:
-        action.follow_up_act = GetBotActionById(action_list, action.follow_up_action_id)
+        action.follow_up_action = GetBotActionById(action_list, action.follow_up_action_id)
 
 
 def GetBotActionByTrigger(actions_list: list, trigger: str):

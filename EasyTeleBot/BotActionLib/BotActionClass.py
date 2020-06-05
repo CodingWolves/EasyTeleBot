@@ -16,12 +16,12 @@ class BotAction(ABC):
         self.follow_up_action_id = None
         if 'follow_up_action_id' in act:
             self.follow_up_action_id = act['follow_up_action_id']
-        self.follow_up_act = None
+        self.follow_up_action = None
 
         self.next_action_id = None
         if 'next_action_id' in act:
             self.next_action_id = act['next_action_id']
-        self.next_act = None
+        self.next_action = None
 
         self.markup = None
         if 'markup_type' in act:
@@ -49,12 +49,12 @@ class BotAction(ABC):
     def PerformAction(self, bot: Bot, chat, message):
         result = None
         print("doing super() in act - {}".format(self.id))
-        if self.follow_up_act:
-            print("follow_up_act has been sent - {} from act - {}".format(self.follow_up_action_id, self.id))
-            result = self.follow_up_act
+        if self.follow_up_action:
+            print("follow_up_action has been sent - {} from act - {}".format(self.follow_up_action_id, self.id))
+            result = self.follow_up_action
         if self.next_action:
-            print("next_act has been sent - {} from act - {}".format(self.next_action_id, self.id))
-            result = self.next_act.PerformAction(bot, chat, message)
+            print("next_action has been sent - {} from act - {}".format(self.next_action_id, self.id))
+            result = self.next_action.PerformAction(bot, chat, message)
         print("sending")
         print(result)
         print("sent")
