@@ -1,3 +1,4 @@
+import random
 from abc import ABC
 
 import StringCalculator
@@ -62,7 +63,59 @@ class CalculateCommand(Command):
         return super(CalculateCommand, self).PerformAction(bot, chat, message)
 
 
+class RandomCommand(Command):
+    def __init__(self, act: dict):
+        super(RandomCommand, self).__init__(act)
+
+    def PerformAction(self, bot, chat, message):
+        random_data_format = self.data
+        random_data_format = RemoveUnreachableFormats(random_data_format, chat)
+        random_data = random_data_format.format(data=chat.data)
+
+        random_list = random_data.split(',')
+        empties_index_list = []
+
+        for i in range(len(random_list)):
+            if random_list[i] is None or random_list[i] == "":
+                empties_index_list.append(i)
+
+        for i in reversed(empties_index_list):
+            del random_list[i]
+
+        if len(random_list) > 0:
+            random_result = random_list[random.randint(0, len(random_list)-1)]
+            chat.data['random_result'] = random_result
+            print("data has been randomised  ,,,  chat_id - {} , value={}"
+                  .format(chat.id, random_result))
+        return super(RandomCommand, self).PerformAction(bot, chat, message)
+
+
+class RedirectCommand(Command):
+    def __init__(self, act: dict):
+        super(RedirectCommand, self).__init__(act)
+
+    def PerformAction(self, bot, chat, message):
+        redirect_text_format = self.data
+        redirect_text_format = RemoveUnreachableFormats(redirect_text_format, chat)
+        redirect_text = redirect_text_format.format(data=chat.data)
+
+        redirect_id = None
+        try:
+            redirect_id = int(redirect_text)
+        finally:
+            if type(redirect_id) is int:
+                if redirect_id == self.id:
+                    print("tried to redirect to the same redirect action (endless recursion)")
+                else:
+                    self.next_action_id = redirect_id
+                    print("data has been redirected  ,,,  chat_id - {} , value={}"
+                          .format(chat.id, self.next_action_id))
+        return super(RedirectCommand, self).PerformAction(bot, chat, message)
+
+
 CommandTypeReferenceDictionary = {
     ActionType.SaveCommand: SaveCommand,
     ActionType.CalculateCommand: CalculateCommand,
+    ActionType.RandomCommand: RandomCommand,
+    ActionType.RedirectCommand: RedirectCommand
 }

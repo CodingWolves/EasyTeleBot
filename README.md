@@ -184,3 +184,57 @@ Calculates the expression in `"data"` using math and saving it into `"calculate_
 }
 ...
 ```
+
+### random
+`"data"` is a list of possible values separated by `','`, randomly will chose one of them and save into `"{data.random_result}"`
+```
+{
+  "id": 1,
+  "triggers": [
+    "random"
+  ],
+  "type": "random",
+  "data": "1,2,3",
+  "next_action_id": 2
+},
+{
+  "id": 2,
+  "triggers": [],
+  "type": "text",
+  "data": "{data.random_result}"
+}
+```
+
+### redirect
+`"data"` is the redirected action id, will works similarly to `"next_action_id"` but it is changeable by data saved. 
+```
+{
+  "id": 1,
+  "triggers": ["redirect to some_result"],
+  "type": "redirect",
+  "data": "{data.some_result}"
+}
+```
+You can use it like the example below but it can be easily be the action it redirects to:
+```
+{
+  "id": 2,
+  "triggers": ["redirect to 3"],
+  "type": "redirect",
+  "data": "3"
+},
+{
+  "id": 3,
+  "triggers": [],
+  "type": "text",
+  "data": "Hello"
+}
+```
+```
+{
+  "id": 3,
+  "triggers": ["redirect to 3"],
+  "type": "text",
+  "data": "Hello"
+}
+```

@@ -4,3 +4,4 @@ SaveCommand = 'save'
 CalculateCommand = 'calculate'
 
 
+IfCommand = 'if'

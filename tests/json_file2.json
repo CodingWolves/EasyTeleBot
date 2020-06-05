@@ -21,6 +21,27 @@
       ],
       "type": "text",
       "data": "{data.calculate_result}"
+    },
+    {
+      "id": 71,
+      "triggers": [
+        "random"
+      ],
+      "type": "random",
+      "data": "1,2,3",
+      "next_action_id": 72
+    },
+    {
+      "id": 72,
+      "triggers": [],
+      "type": "text",
+      "data": "{data.random_result}"
+    },
+    {
+      "id": 81,
+      "triggers": ["redirect"],
+      "type": "redirect",
+      "data": "71"
     }
   ]
 }
