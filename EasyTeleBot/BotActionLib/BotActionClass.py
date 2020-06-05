@@ -52,7 +52,7 @@ class BotAction(ABC):
         if self.follow_up_act:
             print("follow_up_act has been sent - {} from act - {}".format(self.follow_up_action_id, self.id))
             result = self.follow_up_act
-        if self.next_action_id:
+        if self.next_action:
             print("next_act has been sent - {} from act - {}".format(self.next_action_id, self.id))
             result = self.next_act.PerformAction(bot, chat, message)
         print("sending")
