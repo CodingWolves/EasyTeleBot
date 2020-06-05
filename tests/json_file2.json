@@ -16,7 +16,9 @@
     },
     {
       "id": 53,
-      "triggers": ["result"],
+      "triggers": [
+        "result"
+      ],
       "type": "text",
       "data": "{data.calculate_result}"
     }

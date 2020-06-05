@@ -13,7 +13,7 @@ EasyBot = "*"
 tests = "*"
 pandas = "*"
 numpy = "*"
-StringCalculator = "*"
+StringCalculator = ">=0.0.4"
 
 [requires]
 

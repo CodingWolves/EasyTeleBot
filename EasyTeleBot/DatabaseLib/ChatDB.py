@@ -4,9 +4,9 @@ import os
 import numpy
 from pandas import DataFrame
 
-from EasyTeleBot.Chat import Chat
-from EasyTeleBot.GenericFunctions import Object
-from EasyTeleBot.DatabaseLib.pandasDB import DB
+from ..Chat import Chat
+from ..GenericFunctions import Object
+from ..DatabaseLib.pandasDB import DB
 
 
 chat_db_path = os.environ['PYTHONPATH'].split(';')[0]+'/database/db.csv'

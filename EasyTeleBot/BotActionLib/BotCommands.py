@@ -2,17 +2,14 @@ from abc import ABC
 
 import StringCalculator
 
-from EasyTeleBot.BotActionLib import ActionType
-from EasyTeleBot.BotActionLib.BotActionClass import BotAction
-from EasyTeleBot.GenericFunctions import DecodeUTF8, RemoveUnreachableFormats
+from ..BotActionLib import ActionType
+from ..BotActionLib.BotActionClass import BotAction
+from ..GenericFunctions import RemoveUnreachableFormats
 
 
 class Command(BotAction, ABC):
     def __init__(self, act: dict):
         super(Command, self).__init__(act)
-        pass
-
-    pass
 
 
 class SaveCommand(Command):
@@ -24,7 +21,6 @@ class SaveCommand(Command):
             self.eval = act['evaluate']
 
     def PerformAction(self, bot, chat, message):
-        text_message = DecodeUTF8(message.text)
         save_text_format = self.data
         save_text_format = RemoveUnreachableFormats(save_text_format, chat)
         save_text = save_text_format.format(data=chat.data)
@@ -54,7 +50,6 @@ class CalculateCommand(Command):
         super(CalculateCommand, self).__init__(act)
 
     def PerformAction(self, bot, chat, message):
-        text_message = DecodeUTF8(message.text)
         calculate_text_format = self.data
         calculate_text_format = RemoveUnreachableFormats(calculate_text_format, chat)
         calculate_text = calculate_text_format.format(data=chat.data)
@@ -63,7 +58,7 @@ class CalculateCommand(Command):
         chat.data['calculate_result'] = calculate_result
 
         print("data has been calculated  ,,,  chat_id - {} , value={}"
-              .format(chat.id, chat.data['calculate_result']))
+              .format(chat.id, calculate_result))
         return super(CalculateCommand, self).PerformAction(bot, chat, message)
 
 

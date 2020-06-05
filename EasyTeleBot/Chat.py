@@ -1,5 +1,5 @@
-from EasyTeleBot.BotActionLib import GetBotActionByTrigger, GetBotActionById
-from EasyTeleBot.GenericFunctions import Object, DecodeUTF8
+from .BotAction import GetBotActionByTrigger, GetBotActionById
+from .GenericFunctions import Object, DecodeUTF8
 
 
 class Chat(Object):

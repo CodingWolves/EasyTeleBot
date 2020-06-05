@@ -1,5 +1,5 @@
 from EasyTeleBot.GenericFunctions import Object, RemoveUnreachableFormats
-from EasyTeleBot.BotActionLib import ActionType, TextResponse, AnimationResponse, SaveCommand, CalculateCommand
+from EasyTeleBot.BotAction import TextResponse, AnimationResponse, SaveCommand, CalculateCommand
 from EasyTeleBot.BotActionLib.BotActionClass import BotAction
 from random import randint
 
