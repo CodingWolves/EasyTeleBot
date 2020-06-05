@@ -3,7 +3,6 @@ from abc import ABC
 
 import StringCalculator
 
-from ..BotAction import GetBotActionById
 from ..BotActionLib import ActionType
 from ..BotActionLib.BotActionClass import BotAction
 from ..GenericFunctions import RemoveUnreachableFormats
@@ -108,11 +107,14 @@ class RedirectCommand(Command):
                 if redirect_id == self.id:
                     print("tried to redirect to the same redirect action (endless recursion)")
                 else:
-                    next_action = GetBotActionById(chat.bot_actions, redirect_id)
-                    if type(next_action) is BotAction:
-                        next_action.Perform(bot, chat, message)
-                        print("data has been redirected  ,,,  chat_id - {} , value={}"
-                              .format(chat.id, self.next_action_id))
+                    redirect_action = None
+                    for action in chat.bot_actions:
+                        if action.id == redirect_id:
+                            redirect_action = action
+                    if type(redirect_action) is BotAction:
+                        redirect_action.Perform(bot, chat, message)
+                        print("data has been redirected  ,,,  chat_id - {} , redirect_id={}"
+                              .format(chat.id, redirect_id))
                     else:
                         print("performing redirect command , no action id '{}'".format(redirect_id))
         return super(RedirectCommand, self).PerformAction(bot, chat, message)
