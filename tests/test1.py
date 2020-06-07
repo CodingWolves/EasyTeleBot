@@ -1,10 +1,12 @@
+import os
+
 from flask import send_file
 
 from EasyTeleBot.TelegramBot import EasyTelegramBot
 
 file = open('json_file.json')
 file2 = open('json_file2.json')
-easy_bot = EasyTelegramBot([file, file2])
+easy_bot = EasyTelegramBot([file, file2], telegram_token=os.environ['TELEGRAM_TOKEN'])
 app = easy_bot.flask_app
 
 
