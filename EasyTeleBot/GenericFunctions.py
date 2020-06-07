@@ -171,10 +171,10 @@ def RemoveUnreachableTemplateFormats(text_format: str, dat: Data):
 def JoinDictionariesLists(dic1, dic2):
     result_dic = dic1
     for key in dic2:
+        value2 = dic2[key]
         if key in dic1:
             value1 = dic1[key]
             type_value1 = type(value1)
-            value2 = dic2[key]
             type_value2 = type(value2)
             if type_value1 == type_value2:
                 if type_value1 is list:
@@ -186,5 +186,5 @@ def JoinDictionariesLists(dic1, dic2):
             else:
                 result_dic[key] = value2
         else:
-            result_dic[key] = dic2[key]
+            result_dic[key] = value2
     return result_dic
