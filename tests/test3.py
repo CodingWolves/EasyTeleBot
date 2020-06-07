@@ -3,9 +3,9 @@ from datetime import datetime
 
 from EasyTeleBot.DatabaseLib.ChatDB import LoadChat, SaveChat
 from EasyTeleBot.DatabaseLib.pandasDB import DB
-from EasyTeleBot.GenericFunctions import Object
+from EasyTeleBot.GenericFunctions import Data
 
-chat = Object()
+chat = Data()
 chat.id = 2
 
 time = datetime.now()

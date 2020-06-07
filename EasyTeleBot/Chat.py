@@ -1,18 +1,20 @@
+import copy
+
 from .BotAction import GetBotActionByTrigger, GetBotActionById
-from .GenericFunctions import Object, DecodeUTF8
+from .GenericFunctions import Data, DecodeUTF8
 
 
-class Chat(Object):
+class Chat:
     def __init__(self, easy_bot, message):
         super(Chat, self).__init__()
         self.id = message.chat.id
         self.url = easy_bot.base_url
-        self.bot_actions = easy_bot.bot_actions
+        self.bot_actions = copy.deepcopy(easy_bot.bot_actions)
         self.default_action_id = easy_bot.default_action_id
-        self.data = Object()
-        self.data.user = Object()
-        self.data.user.first_name = message.chat.first_name
-        self.data.user.last_name = message.chat.last_name
+        self.data = Data()
+        self.data: Data
+        self.data.user_first_name = message.chat.first_name
+        self.data.user_last_name = message.chat.last_name
         self.follow_up_bot_action_id = False
         self.db_row = None
 

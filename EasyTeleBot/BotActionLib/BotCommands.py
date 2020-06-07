@@ -1,11 +1,12 @@
 import random
 from abc import ABC
+from string import Template
 
 import StringCalculator
 
 from ..BotActionLib import ActionType
 from ..BotActionLib.BotActionClass import BotAction
-from ..GenericFunctions import RemoveUnreachableFormats
+from ..GenericFunctions import RemoveUnreachableTemplateFormats, Data
 
 
 class Command(BotAction, ABC):
@@ -23,26 +24,13 @@ class SaveCommand(Command):
 
     def PerformAction(self, bot, chat, message):
         save_text_format = self.data
-        save_text_format = RemoveUnreachableFormats(save_text_format, chat)
-        save_text = save_text_format.format(data=chat.data)
+        save_text_format = RemoveUnreachableTemplateFormats(save_text_format, chat.data)
+        save_text = Template(save_text_format).substitute(chat.data.__dict__)
 
-        if self.eval:
-            try:
-                data = chat.data
-                eval_result = eval(save_text)  # very risky move , can be hacked in a second , suck as "()"*8**5
-                # [i for i in range(10**100)] crashes the app
-                chat.data[self.save_to_data_name] = eval_result
-            except:
-                print("eval '{}' cannot be evaluated chat_id={} ".format(save_text, chat.id))
-                bot.sendMessage(chat_id=chat.id,
-                                text="eval '{}' cannot be evaluated".format(save_text),
-                                reply_to_message_id=message.message_id)
-                return
-        else:
-            chat.data[self.save_to_data_name] = save_text
+        chat.data.set_attribute(self.save_to_data_name, save_text)
 
         print("data has been changed  ,,,  chat_id - {} , data_name - {} , value={}"
-              .format(chat.id, self.save_to_data_name, chat.data[self.save_to_data_name]))
+              .format(chat.id, self.save_to_data_name, chat.data.get_attribute(self.save_to_data_name)))
         return super(SaveCommand, self).PerformAction(bot, chat, message)
 
 
@@ -52,11 +40,11 @@ class CalculateCommand(Command):
 
     def PerformAction(self, bot, chat, message):
         calculate_text_format = self.data
-        calculate_text_format = RemoveUnreachableFormats(calculate_text_format, chat)
-        calculate_text = calculate_text_format.format(data=chat.data)
+        calculate_text_format = RemoveUnreachableTemplateFormats(calculate_text_format, chat.data)
+        calculate_text = Template(calculate_text_format).substitute(chat.data.__dict__)
 
         calculate_result = StringCalculator.SolveMathProblem(calculate_text)
-        chat.data['calculate_result'] = calculate_result
+        chat.data.set_attribute('calculate_result', calculate_result)
 
         print("data has been calculated  ,,,  chat_id - {} , value={}"
               .format(chat.id, calculate_result))
@@ -69,22 +57,18 @@ class RandomCommand(Command):
 
     def PerformAction(self, bot, chat, message):
         random_data_format = self.data
-        random_data_format = RemoveUnreachableFormats(random_data_format, chat)
-        random_data = random_data_format.format(data=chat.data)
+        random_data_format = RemoveUnreachableTemplateFormats(random_data_format, chat.data)
+        random_data = Template(random_data_format).substitute(chat.data.__dict__)
 
         random_list = random_data.split(',')
-        empties_index_list = []
 
-        for i in range(len(random_list)):
+        for i in reversed(range(len(random_list)-1)):
             if random_list[i] is None or random_list[i] == "":
-                empties_index_list.append(i)
-
-        for i in reversed(empties_index_list):
-            del random_list[i]
+                del random_list[i]
 
         if len(random_list) > 0:
             random_result = random_list[random.randint(0, len(random_list)-1)]
-            chat.data['random_result'] = random_result
+            chat.data.set_attribute('random_result', random_result)
             print("data has been randomised  ,,,  chat_id - {} , value={}"
                   .format(chat.id, random_result))
         return super(RandomCommand, self).PerformAction(bot, chat, message)
@@ -96,8 +80,8 @@ class RedirectCommand(Command):
 
     def PerformAction(self, bot, chat, message):
         redirect_text_format = self.data
-        redirect_text_format = RemoveUnreachableFormats(redirect_text_format, chat)
-        redirect_text = redirect_text_format.format(data=chat.data)
+        redirect_text_format = RemoveUnreachableTemplateFormats(redirect_text_format, chat.data)
+        redirect_text = Template(redirect_text_format).substitute(chat.data.__dict__)
 
         redirect_id = None
         try:

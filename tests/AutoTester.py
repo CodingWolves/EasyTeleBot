@@ -3,7 +3,7 @@ from threading import Thread
 from EasyTeleBot.DatabaseLib.ChatDB import LoadChat, SaveChat
 from tests.messageTester import MessageClass, getCustomizedSequence, getRandomSequenceFromActDict
 from EasyTeleBot.Chat import Chat
-from EasyTeleBot.TelegramBot import CreateEasyTelegramBot
+from EasyTeleBot.TelegramBot import EasyTelegramBot
 import random
 from random import randint
 import datetime
@@ -24,13 +24,13 @@ def StartTester(name):
 
     config_file = [open('json_file.json'), open('json_file2.json')]
 
-    easy_bot = CreateEasyTelegramBot(config_file, testing=True)
+    easy_bot = EasyTelegramBot(config_file, testing=True)
 
     bot_actions_list = easy_bot.bot_actions
     easy_bot.bot = BotClass()
 
-    chats_count = 10
-    garbage_count = 1
+    chats_count = 100
+    garbage_count = 10
     customized_sequences_count = 10
     smart_sequences_count = 0
 
@@ -41,10 +41,9 @@ def StartTester(name):
 
     file = None
     try:
-        file = open("StartTester_"+name+".txt", mode="x")
+        file = open("StartTester_" + name + ".txt", mode="x")
     except:
-        file = open("StartTester_"+name+".txt", mode="w")
-
+        file = open("StartTester_" + name + ".txt", mode="w")
 
     for chat in chats:
         assert issubclass(type(chat), Chat)
@@ -84,7 +83,7 @@ def StartTester(name):
     file.write("\n")
     file.write('smart seq count {} , time {}'.format(smart_sequences_count, smart_seq_total_time))
     file.write("\n")
-    file.write("bot sent "+str(easy_bot.bot.sent_count)+" messages")
+    file.write("bot sent " + str(easy_bot.bot.sent_count) + " messages")
     file.write("\n")
     file.close()
 
@@ -110,7 +109,7 @@ def SequenceSender(bot, chat: Chat, sequence):
     print('new random sequence formed - {}'.format(sequence))
     bot.clear()
     for text in sequence['texts']:
-        print(chat.data.user.first_name)
+        print(chat.data.user_first_name)
         chat.GotTextMessage(bot=bot, message=MessageClass(message_id=random.randint(10000, 99999), text=text,
                                                           chat_id=chat.id, chat_first_name='ido',
                                                           chat_last_name='zany'))
@@ -174,7 +173,7 @@ class BotClass:
 thread_list = []
 number_of_threads = 2
 for i in range(number_of_threads):
-    thread_list.append(Thread(target=StartTester, args=(str(i),), name="StartTester_"+str(i)))
+    thread_list.append(Thread(target=StartTester, args=(str(i),), name="StartTester_" + str(i)))
 
 for thread in thread_list:
     thread.start()

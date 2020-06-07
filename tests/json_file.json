@@ -45,7 +45,7 @@
         "id": 1001,
         "triggers": ["test1"],
         "type": "text",
-        "data": "{data.gg}"
+        "data": "${gg}"
     },
     {
       "id": 1010,
@@ -61,7 +61,7 @@
       "id": 1011,
       "triggers": [],
       "type": "save",
-      "data": "{data.last_text_received}",
+      "data": "${last_text_received}",
       "save_to_data_name": "name",
       "next_action_id": 1012
     },
@@ -69,7 +69,7 @@
       "id": 1012,
       "triggers": ["whats my name?", "what is my name?"],
       "type": "text",
-      "data": "your name is {data.name}"
+      "data": "your name is ${name}"
     }
   ],
   "default_action_id": 12,

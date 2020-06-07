@@ -82,12 +82,34 @@ class Object(object):
         return False
 
 
+class Data(object):
+    def has_attribute(self, attr):
+        return hasattr(self, attr)
+
+    def __str__(self):
+        return str(self.__dict__)
+
+    def set_dictionary(self, dictionary: dict):
+        self.__dict__ = dictionary
+
+    def set_attribute(self, name, value):
+        self.__setattr__(name, value)
+
+    def get_attribute(self, name):
+        return self.__getattribute__(name)
+
+
 def DecodeUTF8(text: str):
     return text.encode('utf-8').decode()
 
 
 def RemoveFormatName(text, format_name) -> str:
     remove_from_index = text.find('{' + format_name + '}')
+    return text[:remove_from_index] + text[text.find('}', remove_from_index) + 1:]
+
+
+def RemoveTemplateFormatName(text, format_name) -> str:
+    remove_from_index = text.find('${' + format_name + '}')
     return text[:remove_from_index] + text[text.find('}', remove_from_index) + 1:]
 
 
@@ -99,6 +121,18 @@ def GetFormatNames(text) -> list:
         names.append(text[start_index + 1:end_index])
         text = text[:start_index] + text[end_index + 1:]
         start_index = text.find('{')
+        end_index = text.find('}', start_index)
+    return names
+
+
+def GetTemplateFormatNames(text) -> list:
+    names = []
+    start_index = text.find('${')
+    end_index = text.find('}', start_index)
+    while start_index != -1 and end_index != -1:
+        names.append(text[start_index + 2:end_index])
+        text = text[:start_index] + text[end_index + 1:]
+        start_index = text.find('${')
         end_index = text.find('}', start_index)
     return names
 
@@ -122,6 +156,15 @@ def RemoveUnreachableFormats(text_format: str, obj: Object):
     for format_name in format_names:
         if not Object.hasAttrNested(obj, format_name):
             new_text_format = RemoveFormatName(new_text_format, format_name)
+    return new_text_format
+
+
+def RemoveUnreachableTemplateFormats(text_format: str, dat: Data):
+    new_text_format = text_format
+    format_names = GetTemplateFormatNames(text_format)
+    for format_name in format_names:
+        if not dat.has_attribute(format_name):
+            new_text_format = RemoveTemplateFormatName(new_text_format, format_name)
     return new_text_format
 
 

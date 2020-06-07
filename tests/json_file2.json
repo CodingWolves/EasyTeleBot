@@ -11,7 +11,7 @@
       "id": 52,
       "triggers": [],
       "type": "calculate",
-      "data": "{data.last_text_received}",
+      "data": "${last_text_received}",
       "next_action_id": 53
     },
     {
@@ -20,7 +20,7 @@
         "result"
       ],
       "type": "text",
-      "data": "{data.calculate_result}"
+      "data": "${calculate_result}"
     },
     {
       "id": 71,
@@ -35,7 +35,7 @@
       "id": 72,
       "triggers": [],
       "type": "text",
-      "data": "{data.random_result}"
+      "data": "${random_result}"
     },
     {
       "id": 81,

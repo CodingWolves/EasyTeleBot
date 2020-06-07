@@ -13,7 +13,7 @@ Package Dependencies:
 - python-telegram-bot
 
 ## Usage 
-`import EasyTeleBot`
+`from EasyTeleBot.TelegramBot import EasyTelegramBot`
 
 After importing the EasyTeleBot get the config json file in one of two ways:
 
@@ -23,7 +23,7 @@ After importing the EasyTeleBot get the config json file in one of two ways:
 
 Use CreateEasyTelegramBot to create the bot it will create the whole bot automatically.
 
-`bot = EasyTeleBot.CreateEasyTelegramBot(config_file)`
+`bot = EasyTelegramBot(config_files)`
 
 Inside this class lays a flask app which you can get by typing - `bot.flask_app`.
 Run this flask app to start handling the messages telegram is sending to the bot (user message go through telegram servers).
@@ -50,6 +50,10 @@ Optional:
 
 - **"default_action_id"** - If no action triggers this action id will perform.
 
+You can also put those setting when constructing the class, but not actions.
+
+`bot = EasyTelegramBot([file, file2], telegram_token="123", webhook_url="hook_url", bot_name="new_bot", default_action_id=3)`
+
 #### Example config_file.json
 ```
 {
@@ -70,8 +74,8 @@ Each action has these attributes:
 1. **"triggers"** - List of user messages that initiate this action.
 1. [**"type"**](https://github.com/idozahavy/EasyTeleBot#action-types) - The type of action. Each type of action does a different thing.
 1. **"data"** - The data of the function (read [Action Types](https://github.com/idozahavy/EasyTeleBot#action-types) to better understand). 
-If there is a format, it will try to extract saved information, example `"{data.name}"` will change to the value saved in `"name"`.
-`"{data.last_text_received}"` will change into the last text message the user sent to chat.
+If there is a format, it will try to extract saved information, example `"${name}"` will change to the value saved in `"name"`.
+`"${last_text_received}"` will change into the last text message the user sent to chat.
 
 Optional attributes:
 - **"next_action_id"** - Do this ids action right after the this action finishes.
@@ -109,7 +113,7 @@ Every `','` will separate between words and every `':'` will separate between ro
 
 ## Action Types
 ### text
-Sends back a message containing `"data"`.
+Sends back a message containing `"data"` value.
 ```
 ...
     "triggers": ["hi", "hello", "hey"],
@@ -119,7 +123,7 @@ Sends back a message containing `"data"`.
 ```
 
 ### animation
-Sends back an animation where `"data"` is the url of the animation. 
+Sends back an animation where `"data"` value is the url of the animation. 
 Converts all to gifs.
 ```
 ...
@@ -130,7 +134,7 @@ Converts all to gifs.
 ```
 
 ### save
-Saves the value that is in `"data"` into `"save_to_data_name"`.
+Saves the value in `"data"` into `"save_to_data_name"` name space.
 ```
 ...
     "triggers": ["save 'ok' into 'blop' data name"],
@@ -153,7 +157,7 @@ Usually **you should** use it to save user input like this example:
     "id": 2,
     "triggers": [],
     "type": "save",
-    "data": "{data.last_text_received}",
+    "data": "${last_text_received}",
     "save_to_data_name": "name",
     "next_action_id": 3
 },
@@ -161,7 +165,7 @@ Usually **you should** use it to save user input like this example:
     "id": 3,
     "triggers": [],
     "type": "text",
-    "data": "your name is {data.name}",
+    "data": "your name is ${name}",
 },
 ```
 
@@ -180,13 +184,13 @@ Calculates the expression in `"data"` using math and saving it into `"calculate_
     "id": 2,
     "triggers": [],
     "type": "text",
-    "data": "5^5 = {data.calculate_result}"
+    "data": "5^5 = ${calculate_result}"
 }
 ...
 ```
 
 ### random
-`"data"` is a list of possible values separated by `','`, randomly will chose one of them and save into `"{data.random_result}"`
+`"data"` is a list of possible values separated by `','`, randomly will chose one of them and save into `"${random_result}"`
 ```
 {
   "id": 1,
@@ -201,18 +205,18 @@ Calculates the expression in `"data"` using math and saving it into `"calculate_
   "id": 2,
   "triggers": [],
   "type": "text",
-  "data": "{data.random_result}"
+  "data": "${random_result}"
 }
 ```
 
 ### redirect
-`"data"` is the redirected action id, will works similarly to `"next_action_id"` but it is changeable by data saved. 
+`"data"` refers to the redirected action id, will works similarly to `"next_action_id"` but it is changeable by data saved. 
 ```
 {
   "id": 1,
-  "triggers": ["redirect to some_result"],
+  "triggers": ["redirect to some_action_id"],
   "type": "redirect",
-  "data": "{data.some_result}"
+  "data": "${some_action_id}"
 }
 ```
 You can use it like the example below but it can be easily be the action it redirects to:

@@ -1,15 +1,17 @@
-from EasyTeleBot.GenericFunctions import Object, RemoveUnreachableFormats
+from string import Template
+
+from EasyTeleBot.GenericFunctions import Data, RemoveUnreachableTemplateFormats
 from EasyTeleBot.BotAction import TextResponse, AnimationResponse, SaveCommand, CalculateCommand
 from EasyTeleBot.BotActionLib.BotActionClass import BotAction
 from random import randint
 
 
-class MessageClass(Object):
+class MessageClass:
     def __init__(self, message_id: int, text: str, chat_id: int, chat_first_name: str, chat_last_name: str):
         super(MessageClass, self).__init__()
         self.message_id = message_id
         self.text = text
-        self.chat = Object()
+        self.chat = Data()
         self.chat.id = chat_id
         self.chat.first_name = chat_first_name
         self.chat.last_name = chat_last_name
@@ -20,14 +22,14 @@ def getCustomizedSequence(index: int):
     pass
 
 
-def getRandomSequenceFromActDict(actions_list, chat=Object()):
+def getRandomSequenceFromActDict(actions_list, chat=Data()):
     index = randint(0, len(actions_list) - 1)
     while len(actions_list[index].triggers) == 0:
         index = randint(0, len(actions_list) - 1)
     return getSequenceFromActDict(actions_list, actions_list[index].id, chat=chat)
 
 
-def getSequenceFromActDict(actions_list, action_id: int, chat=Object(), is_follow_up=False, is_next_act=False):
+def getSequenceFromActDict(actions_list, action_id: int, chat=Data(), is_follow_up=False, is_next_act=False):
     action_class = None
     action_class: BotAction
     for act in actions_list:
@@ -44,37 +46,28 @@ def getSequenceFromActDict(actions_list, action_id: int, chat=Object(), is_follo
         if type(action_class) is TextResponse or type(action_class) is AnimationResponse:
             user_msg = None
             if len(action_class.triggers) > 0:
-                user_msg = action_class.triggers[randint(0, len(action_class.triggers)-1)]
+                user_msg = action_class.triggers[randint(0, len(action_class.triggers) - 1)]
                 user_messages.append(user_msg)
             chat.data.last_text_received = user_msg
-            data_formatted = RemoveUnreachableFormats(action_class.data, chat)
-            server_msg = data_formatted.format(data=chat.data)
+            data_formatted = RemoveUnreachableTemplateFormats(action_class.data, chat.data)
+            server_msg = Template(data_formatted).substitute(chat.data.__dict__)
             if server_msg != "":
                 server_messages.append(server_msg)
         elif type(action_class) == SaveCommand:
             action_class: SaveCommand
-            save_text = action_class.data.format(data=chat.data)
-            if 'evaluate' in action_class:
-                try:
-                    eval_result = eval(save_text)  # very risky move , can be hacked in a second
-                    data_name = action_class.save_to_data_name
-                    chat.data[data_name] = eval_result
-                except:
-                    server_messages.append("eval '{}' cannot be evaluated".format(save_text))
-                    return {'texts': user_messages, 'responses': server_messages}
-            else:
-                data_name = action_class.save_to_data_name
-                chat.data[data_name] = save_text
+            save_text = Template(action_class.data).substitute(chat.data.__dict__)
+            data_name = action_class.save_to_data_name
+            chat.data.set_attribute(data_name, save_text)
         else:
             raise Exception('101')
     else:
         if type(action_class) is SaveCommand:
             action_class: SaveCommand
             chat.data.last_text_received = getRandomInput()
-            user_msg = action_class.data.format(data=chat.data)
+            user_msg = Template(action_class.data).substitute(chat.data.__dict__)
             user_messages.append(user_msg)
             data_name = action_class.save_to_data_name
-            chat.data[data_name] = user_msg.format(data=chat.data)
+            chat.data.set_attribute(data_name, Template(user_msg).substitute(chat.data.__dict__))
         elif type(action_class) is CalculateCommand:
             return {'texts': [], 'responses': []}
         else:
@@ -84,7 +77,8 @@ def getSequenceFromActDict(actions_list, action_id: int, chat=Object(), is_follo
         user_messages.clear()
 
     if action_class.next_action_id:
-        next_action_message = getSequenceFromActDict(actions_list, action_class.next_action_id, chat=chat, is_next_act=True)
+        next_action_message = getSequenceFromActDict(actions_list, action_class.next_action_id, chat=chat,
+                                                     is_next_act=True)
         for user_msg in next_action_message['texts']:
             user_messages.append(user_msg)
         for server_msg in next_action_message['responses']:
@@ -92,7 +86,7 @@ def getSequenceFromActDict(actions_list, action_id: int, chat=Object(), is_follo
 
     elif action_class.follow_up_action_id:
         follow_up_action_message = getSequenceFromActDict(actions_list, action_class.follow_up_action_id,
-                                                       chat=chat, is_follow_up=True)
+                                                          chat=chat, is_follow_up=True)
         for user_msg in follow_up_action_message['texts']:
             user_messages.append(user_msg)
         for server_msg in follow_up_action_message['responses']:
@@ -102,7 +96,7 @@ def getSequenceFromActDict(actions_list, action_id: int, chat=Object(), is_follo
 
 
 def getRandomInput():
-    return NamesTemplates[randint(0, len(NamesTemplates)-1)]
+    return NamesTemplates[randint(0, len(NamesTemplates) - 1)]
 
 
 NamesTemplates = ['ido', 'nadav', 'gal', 'ben', 'alon', 'adi', 'omer', 'inbal', 'shir', 'dor']

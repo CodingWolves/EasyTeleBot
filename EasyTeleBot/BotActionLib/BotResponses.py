@@ -1,13 +1,15 @@
+from string import Template
+
 from ..BotActionLib import ActionType
 from ..BotActionLib.BotActionClass import BotAction
-from ..GenericFunctions import GetFormatNames, Object, RemoveFormatName, RemoveUnreachableFormats
+from ..GenericFunctions import RemoveUnreachableTemplateFormats
 
 
 class TextResponse(BotAction):
     def PerformAction(self, bot, chat, message):
         text_response_format = self.data
-        text_response_format = RemoveUnreachableFormats(text_response_format, chat)
-        text_response = text_response_format.format(data=chat.data)
+        text_response_format = RemoveUnreachableTemplateFormats(text_response_format, chat.data)
+        text_response = Template(text_response_format).substitute(chat.data.__dict__)
         if text_response == "":
             print("error - act id {} tried sending an empty text".format(self.id))
         else:
@@ -21,8 +23,8 @@ class TextResponse(BotAction):
 class AnimationResponse(BotAction):
     def PerformAction(self, bot, chat, message):
         url_format = self.data
-        url_format = RemoveUnreachableFormats(url_format, chat)
-        url = url_format.format(data=chat.data)
+        url_format = RemoveUnreachableTemplateFormats(url_format, chat.data)
+        url = Template(url_format).substitute(chat.data.__dict__)
         if url == "":
             print("act id {} tried sending an empty url animation".format(self.id))
         else:
