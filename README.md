@@ -75,7 +75,7 @@ Each action has these attributes:
 1. [**"type"**](https://github.com/idozahavy/EasyTeleBot#action-types) - The type of action. Each type of action does a different thing.
 1. **"data"** - The data of the function (read [Action Types](https://github.com/idozahavy/EasyTeleBot#action-types) to better understand). 
 If there is a format, it will try to extract saved information, example `"${name}"` will change to the value saved in `"name"`.
-`"${last_text_received}"` will change into the last text message the user sent to chat.
+`"${last_text_received}"` will be the last text message the user sent to chat.
 
 Optional attributes:
 - **"next_action_id"** - Do this ids action right after the this action finishes.
@@ -113,7 +113,7 @@ Every `','` will separate between words and every `':'` will separate between ro
 
 ## Action Types
 ### text
-Sends back a message containing `"data"` value.
+Sends back a message containing the value in `"data"`.
 ```
 ...
     "triggers": ["hi", "hello", "hey"],
@@ -134,7 +134,7 @@ Converts all to gifs.
 ```
 
 ### save
-Saves the value in `"data"` into `"save_to_data_name"` name space.
+Saves the value in `"data"` into `"save_to_data_name"` name space. To output this value, the `"data"` format is `"${data_name}"`.
 ```
 ...
     "triggers": ["save 'ok' into 'blop' data name"],
