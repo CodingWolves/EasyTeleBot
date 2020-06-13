@@ -82,25 +82,24 @@ class RedirectCommand(Command):
         redirect_text_format = self.data
         redirect_text_format = RemoveUnreachableTemplateFormats(redirect_text_format, chat.data)
         redirect_text = Template(redirect_text_format).substitute(chat.data.__dict__)
+        redirect_text: str
 
         redirect_id = None
-        try:
+        if redirect_text.isnumeric():
             redirect_id = int(redirect_text)
-        finally:
-            if type(redirect_id) is int:
-                if redirect_id == self.id:
-                    print("tried to redirect to the same redirect action (endless recursion)")
+            if redirect_id == self.id:
+                print("tried to redirect to the same redirect action (endless recursion)")
+            else:
+                redirect_action = None
+                for action in chat.bot_actions:
+                    if action.id == redirect_id:
+                        redirect_action = action
+                if type(redirect_action) is BotAction:
+                    redirect_action.Perform(bot, chat, message)
+                    # print("data has been redirected  ,,,  chat_id - {} , redirect_id={}"
+                    #       .format(chat.id, redirect_id))
                 else:
-                    redirect_action = None
-                    for action in chat.bot_actions:
-                        if action.id == redirect_id:
-                            redirect_action = action
-                    if type(redirect_action) is BotAction:
-                        redirect_action.Perform(bot, chat, message)
-                        print("data has been redirected  ,,,  chat_id - {} , redirect_id={}"
-                              .format(chat.id, redirect_id))
-                    else:
-                        print("performing redirect command , no action id '{}'".format(redirect_id))
+                    print("performing redirect command , no action id '{}'".format(redirect_id))
         return super(RedirectCommand, self).PerformAction(bot, chat, message)
 
 
