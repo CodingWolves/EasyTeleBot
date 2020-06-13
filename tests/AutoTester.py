@@ -41,9 +41,9 @@ def StartTester(name):
 
     file = None
     try:
-        file = open("StartTester_" + name + ".txt", mode="x")
+        file = open("../junk/StartTester_" + name + ".txt", mode="x")
     except:
-        file = open("StartTester_" + name + ".txt", mode="w")
+        file = open("../junk/StartTester_" + name + ".txt", mode="w")
 
     for chat in chats:
         assert issubclass(type(chat), Chat)
@@ -89,15 +89,9 @@ def StartTester(name):
 
 
 def GarbageSender(bot, chat: Chat, count: int, text=None):
-    messages = None
-    if text:
-        messages = [MessageClass(message_id=random.randint(10000, 99999), text=text,
-                                 chat_id=chat.id, chat_first_name='ido', chat_last_name='zany')
-                    for i in range(count)]
-    else:
-        messages = [MessageClass(message_id=random.randint(10000, 99999), text=getRandText(),
-                                 chat_id=chat.id, chat_first_name='ido', chat_last_name='zany')
-                    for i in range(count)]
+    messages = [MessageClass(message_id=random.randint(10000, 99999), text=text if text else getRandText(),
+                             chat_id=chat.id, chat_first_name='ido', chat_last_name='zany')
+                for _ in range(count)]
     for msg in messages:
         bot.clear()
         chat.GotTextMessage(bot=bot, message=msg)
@@ -109,7 +103,6 @@ def SequenceSender(bot, chat: Chat, sequence):
     print('new random sequence formed - {}'.format(sequence))
     bot.clear()
     for text in sequence['texts']:
-        print(chat.data.user_first_name)
         chat.GotTextMessage(bot=bot, message=MessageClass(message_id=random.randint(10000, 99999), text=text,
                                                           chat_id=chat.id, chat_first_name='ido',
                                                           chat_last_name='zany'))
