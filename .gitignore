@@ -3,6 +3,7 @@
 *.bat
 *Pypi*
 *_test.py
+/junk
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
