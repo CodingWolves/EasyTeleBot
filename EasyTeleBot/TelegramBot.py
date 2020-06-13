@@ -87,7 +87,7 @@ class EasyTelegramBot:
         if self.bot_name is None:
             raise Exception("bot_name not found")
 
-        self.chats = []
+        self.chats = {}
 
         if 'default_action_id' in config_text:
             self.default_action_id = config_text['default_action_id']
@@ -120,18 +120,17 @@ class EasyTelegramBot:
                 return 'ok'
             if update.message and update.message.document:
                 return 'ok'
-            current_chat = False
-            for chat in self.chats:  # searches if chat has previous records
-                if chat.id == update.message.chat.id:
-                    current_chat = chat
-                    break
-            if not current_chat:
-                current_chat = Chat(self, update.message)  # creates a new chat
+
+            chat_id = update.message.chat.id
+            if chat_id not in self.chats:
+                self.chats[chat_id] = Chat(self, update.message)  # creates a new chat
                 print("New chat added id = {}".format(update.message.chat.id))
-                self.chats.append(current_chat)
+            current_chat = self.chats[chat_id]
+
             LoadChat(current_chat)
             current_chat.GotTextMessage(self.bot, update.message)
             SaveChat(current_chat)
+
             return 'ok'
 
         @self.flask_app.route('/set_webhook', methods=['GET', 'POST'])
