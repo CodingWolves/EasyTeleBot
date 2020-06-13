@@ -20,8 +20,6 @@ def StartTester(name):
     garbage_total_time = datetime.timedelta()
     custom_seq_total_time = datetime.timedelta()
 
-    print(random.random())
-
     config_file = [open('json_file.json'), open('json_file2.json')]
 
     easy_bot = EasyTelegramBot(config_file, testing=True)
