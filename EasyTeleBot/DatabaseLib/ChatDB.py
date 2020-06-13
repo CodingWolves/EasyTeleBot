@@ -1,6 +1,7 @@
 import copy
 import json
 import os
+from threading import Lock
 
 import numpy
 from pandas import DataFrame
@@ -12,13 +13,17 @@ from ..DatabaseLib.pandasDB import DB
 
 chat_db_path = os.environ['PYTHONPATH'].split(';')[0]+'/database/db.csv'
 
+chat_db_lock = Lock()
+
 
 def LoadChat(chat: Chat):
+    chat_db_lock.acquire()
     if hasattr(chat, 'db_row') and chat.db_row is not None:
         chat_row = DB.GetChatOnlyRow(chat_db_path, chat)
     else:
         db = DB(chat_db_path)
         chat_row = db.GetRowByColumnValue('id', chat.id)
+    chat_db_lock.release()
     chat_row: DataFrame
     if chat_row is None:
         return
@@ -50,9 +55,12 @@ def SaveChat(chat: Chat):
     del chat_dict['bot_actions']
     del chat_dict['url']
     del chat_dict['db_row']
-    db = DB(chat_db_path)
 
+    chat_db_lock.acquire()
+    db = DB(chat_db_path)
     db.AddRow(chat_dict, important_column='id')
     db.__save__()
     # db.data.to_json(os.environ['PYTHONPATH'].split(';')[0]+'/database/db.json')
-    print(chat_dict)
+    chat_db_lock.release()
+
+    # print(chat_dict)
