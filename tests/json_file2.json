@@ -62,7 +62,7 @@
       "id": 101,
       "triggers": ["something"],
       "type": "if",
-      "data": "${last_text_received}=='something'",
+      "data": "'${last_text_received}'=='something'",
       "true_action_id": 103,
       "false_action_id": 102
     },

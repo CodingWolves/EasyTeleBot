@@ -254,7 +254,7 @@ You can use it like the example below but it can be easily be the action it redi
   "data": "${some_action_id}"
 }
 ```
-You can use it like the example below but it can be easily be the action it redirects to:
+You can use it like the example below:
 ```
 ...
 {
