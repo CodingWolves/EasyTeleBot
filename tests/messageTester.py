@@ -1,7 +1,7 @@
 from string import Template
 
 from EasyTeleBot.GenericFunctions import Data, RemoveUnreachableTemplateFormats
-from EasyTeleBot.BotAction import TextResponse, AnimationResponse, SaveCommand, CalculateCommand
+from EasyTeleBot.BotAction import *
 from EasyTeleBot.BotActionLib.BotActionClass import BotAction
 from random import randint
 
@@ -58,6 +58,12 @@ def getSequenceFromActDict(actions_list, action_id: int, chat=Data(), is_follow_
             save_text = Template(action_class.data).substitute(chat.data.__dict__)
             data_name = action_class.save_to_data_name
             chat.data.set_attribute(data_name, save_text)
+        elif isinstance(action_class, CalculateCommand):
+            pass
+        elif isinstance(action_class, RandomCommand):
+            pass
+        elif isinstance(action_class, RedirectCommand):
+            pass
         else:
             raise Exception('101')
     else:
