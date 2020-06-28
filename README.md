@@ -274,14 +274,15 @@ You can use it like the example below:
 }
 ...
 ```
-or use it as a result to a message:
+Or use it as a result to a message, but you need to account that it is a string so surround it with quotes.
+This example will always go to 4 because its always true unless some other action will redirect to it:
 ```
 ...
 {
   "id": 3,
   "triggers": ["something"],
   "type": "if",
-  "data": "${last_text_received}=='something'",
+  "data": "'${last_text_received}'=='something'",
   "true_action_id": 4,
   "false_action_id": 5
 }
