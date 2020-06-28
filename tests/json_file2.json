@@ -57,6 +57,26 @@
       "data": "${random_result}>4",
       "true_action_id": 81,
       "false_action_id": 51
+    },
+    {
+      "id": 101,
+      "triggers": ["something"],
+      "type": "if",
+      "data": "${last_text_received}=='something'",
+      "true_action_id": 103,
+      "false_action_id": 102
+    },
+    {
+      "id": 102,
+      "triggers": [],
+      "type": "text",
+      "data": "False"
+    },
+    {
+      "id": 103,
+      "triggers": [],
+      "type": "text",
+      "data": "True"
     }
   ]
 }

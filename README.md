@@ -242,3 +242,48 @@ You can use it like the example below but it can be easily be the action it redi
   "data": "Hello"
 }
 ```
+
+### if
+`"data"` is the evaluted text that checks for true or false, again it works with `${data}` strings.
+`"true_action_id"` and `"false_action_id"` are the ids of the next actions if the result is true or false.
+```
+{
+  "id": 1,
+  "triggers": ["check"],
+  "type": "if",
+  "data": "${some_action_id}"
+}
+```
+You can use it like the example below but it can be easily be the action it redirects to:
+```
+...
+{
+  "id": 2,
+  "triggers": ["random the next action"],
+  "type": "random",
+  "data": "1,2",
+  "next_action_id": 3
+},
+{
+  "id": 3,
+  "triggers": [],
+  "type": "if",
+  "data": "${random_result}>1",
+  "true_action_id": 4,
+  "false_action_id": 5
+}
+...
+```
+or use it as a result to a message:
+```
+...
+{
+  "id": 3,
+  "triggers": ["something"],
+  "type": "if",
+  "data": "${last_text_received}=='something'",
+  "true_action_id": 4,
+  "false_action_id": 5
+}
+...
+```

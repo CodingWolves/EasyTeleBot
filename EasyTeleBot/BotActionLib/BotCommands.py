@@ -84,7 +84,6 @@ class RedirectCommand(Command):
         redirect_text = Template(redirect_text_format).substitute(chat.data.__dict__)
         redirect_text: str
 
-        redirect_id = None
         if redirect_text.isnumeric():
             redirect_id = int(redirect_text)
             if redirect_id == self.id:
@@ -116,6 +115,7 @@ class IfCommand(Command):
         if_text: str
         try:
             if_result = eval(if_text, {"builtins": None})
+            next_action_id = self.false_action_id
             if isinstance(if_result, bool):
                 next_action_id = self.true_action_id if if_result else self.false_action_id
                 next_action = None
@@ -123,7 +123,7 @@ class IfCommand(Command):
                     if action.id == next_action_id:
                         next_action = action
                 if isinstance(next_action, BotAction):
-                    next_action.PerformAction(bot, chat, message)
+                    return next_action.PerformAction(bot, chat, message)
                 else:
                     print("performing redirect command , no action id '{}'".format(next_action_id))
             else:
