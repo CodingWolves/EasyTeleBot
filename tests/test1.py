@@ -12,6 +12,16 @@ app = easy_bot.flask_app
 
 @app.route('/db')
 def db():
+    import socket
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_address = ("localhost", 10000)
+    sock.connect(server_address)
+
+    message = 'I am here'
+    sock.sendall(message.encode('utf-8'))
+    sock.close()
+
     return send_file('../database/db.csv')
 
 
