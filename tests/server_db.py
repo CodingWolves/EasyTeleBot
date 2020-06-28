@@ -1,7 +1,7 @@
 import socket
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server_address = ("localhost", 10000)
+server_address = ("localhost", 443)
 print("Starting Server...")
 try:
     sock.bind(server_address)
