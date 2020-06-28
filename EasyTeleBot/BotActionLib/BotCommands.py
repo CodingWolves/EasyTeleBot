@@ -123,12 +123,12 @@ class IfCommand(Command):
                     if action.id == next_action_id:
                         next_action = action
                 if isinstance(next_action, BotAction):
-                    next_action.Perform(bot, chat, message)
+                    next_action.PerformAction(bot, chat, message)
                 else:
                     print("performing redirect command , no action id '{}'".format(next_action_id))
             else:
                 print("if result is not boolean '{}'".format(if_result))
-        finally:
+        except:
             print("could not resolve if data '{}'".format(if_text))
         return super(IfCommand, self).PerformAction(bot, chat, message)
 
