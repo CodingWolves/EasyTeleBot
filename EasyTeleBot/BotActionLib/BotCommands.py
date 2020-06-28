@@ -29,8 +29,8 @@ class SaveCommand(Command):
 
         chat.data.set_attribute(self.save_to_data_name, save_text)
 
-        print("data has been changed  ,,,  chat_id - {} , data_name - {} , value={}"
-              .format(chat.id, self.save_to_data_name, chat.data.get_attribute(self.save_to_data_name)))
+        # print("data has been changed  ,,,  chat_id - {} , data_name - {} , value={}"
+        #       .format(chat.id, self.save_to_data_name, chat.data.get_attribute(self.save_to_data_name)))
         return super(SaveCommand, self).PerformAction(bot, chat, message)
 
 
@@ -46,8 +46,8 @@ class CalculateCommand(Command):
         calculate_result = StringCalculator.SolveMathProblem(calculate_text)
         chat.data.set_attribute('calculate_result', calculate_result)
 
-        print("data has been calculated  ,,,  chat_id - {} , value={}"
-              .format(chat.id, calculate_result))
+        # print("data has been calculated  ,,,  chat_id - {} , value={}"
+        #       .format(chat.id, calculate_result))
         return super(CalculateCommand, self).PerformAction(bot, chat, message)
 
 
@@ -69,8 +69,8 @@ class RandomCommand(Command):
         if len(random_list) > 0:
             random_result = random_list[random.randint(0, len(random_list)-1)]
             chat.data.set_attribute('random_result', random_result)
-            print("data has been randomised  ,,,  chat_id - {} , value={}"
-                  .format(chat.id, random_result))
+            # print("data has been randomised  ,,,  chat_id - {} , value={}"
+            #       .format(chat.id, random_result))
         return super(RandomCommand, self).PerformAction(bot, chat, message)
 
 
@@ -94,8 +94,8 @@ class RedirectCommand(Command):
                 for action in chat.bot_actions:
                     if action.id == redirect_id:
                         redirect_action = action
-                if type(redirect_action) is BotAction:
-                    redirect_action.Perform(bot, chat, message)
+                if isinstance(redirect_action, BotAction):
+                    return redirect_action.PerformAction(bot, chat, message)
                     # print("data has been redirected  ,,,  chat_id - {} , redirect_id={}"
                     #       .format(chat.id, redirect_id))
                 else:
@@ -103,9 +103,40 @@ class RedirectCommand(Command):
         return super(RedirectCommand, self).PerformAction(bot, chat, message)
 
 
+class IfCommand(Command):
+    def __init__(self, act: dict):
+        super(IfCommand, self).__init__(act)
+        self.true_action_id = int(act["true_action_id"])
+        self.false_action_id = int(act["false_action_id"])
+
+    def PerformAction(self, bot, chat, message):
+        if_text_format = self.data
+        if_text_format = RemoveUnreachableTemplateFormats(if_text_format, chat.data)
+        if_text = Template(if_text_format).substitute(chat.data.__dict__)
+        if_text: str
+        try:
+            if_result = eval(if_text, {"builtins": None})
+            if isinstance(if_result, bool):
+                next_action_id = self.true_action_id if if_result else self.false_action_id
+                next_action = None
+                for action in chat.bot_actions:
+                    if action.id == next_action_id:
+                        next_action = action
+                if isinstance(next_action, BotAction):
+                    next_action.Perform(bot, chat, message)
+                else:
+                    print("performing redirect command , no action id '{}'".format(next_action_id))
+            else:
+                print("if result is not boolean '{}'".format(if_result))
+        finally:
+            print("could not resolve if data '{}'".format(if_text))
+        return super(IfCommand, self).PerformAction(bot, chat, message)
+
+
 CommandTypeReferenceDictionary = {
     ActionType.SaveCommand: SaveCommand,
     ActionType.CalculateCommand: CalculateCommand,
     ActionType.RandomCommand: RandomCommand,
-    ActionType.RedirectCommand: RedirectCommand
+    ActionType.RedirectCommand: RedirectCommand,
+    ActionType.IfCommand: IfCommand,
 }

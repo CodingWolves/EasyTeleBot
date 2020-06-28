@@ -42,6 +42,21 @@
       "triggers": ["redirect"],
       "type": "redirect",
       "data": "71"
+    },
+    {
+      "id": 91,
+      "triggers": ["rnd"],
+      "type": "random",
+      "data": "1,2,3,4,5,6",
+      "next_action_id": 92
+    },
+    {
+      "id": 92,
+      "triggers": [],
+      "type": "if",
+      "data": "${random_result}>4",
+      "true_action_id": 81,
+      "false_action_id": 51
     }
   ]
 }
